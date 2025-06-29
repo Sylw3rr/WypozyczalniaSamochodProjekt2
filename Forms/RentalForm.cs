@@ -1,6 +1,13 @@
 ﻿using CarRentalSystem.Interfaces;
 using CarRentalSystem.Models;
 using CarRentalSystem.Utils;
+using System.Windows.Forms;     // dla Form, Label, Panel, TextBox, Button, DateTimePicker
+using System.Drawing;           // dla Color, Font, itd.
+using System.Data.SQLite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Data;
 
 namespace CarRentalSystem.Forms
 {

@@ -1,5 +1,12 @@
-using CarRentalSystem.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Data;
+using System.Data.SQLite;       // dla SQLiteConnection, SQLiteCommand
 using CarRentalSystem.Models;
+using CarRentalSystem.Interfaces;
+using CarRentalSystem.Utils;
+using System.Windows.Forms;
 
 namespace CarRentalSystem.Services
 {
@@ -13,23 +20,59 @@ namespace CarRentalSystem.Services
         {
             _logger = logger;
             _customers = new List<Customer>();
-            LoadSampleData();
-        }
-
-        private void LoadSampleData()
-        {
-            AddCustomer(new Customer(0, "Jan", "Kowalski", "jan.k@email.com", "123456789", new DateTime(1990, 5, 15)));
-            AddCustomer(new Customer(0, "Anna", "Nowak", "anna.n@email.com", "987654321", new DateTime(1985, 10, 25)));
         }
 
         public void AddCustomer(Customer customer)
         {
             customer.Id = _nextId++;
             _customers.Add(customer);
+            SaveCustomerToDb(customer);
             _logger.LogInfo($"Dodano klienta: {customer.FullName}");
         }
 
         public IEnumerable<Customer> GetAllCustomers() => _customers;
         public Customer GetCustomerById(int id) => _customers.FirstOrDefault(c => c.Id == id);
+        public void SaveCustomerToDb(Customer customer)
+        {
+            using (var conn = Database.GetConnection())
+            {
+                var cmd = new SQLiteCommand("INSERT OR REPLACE INTO Customers (Id, FirstName, LastName, Email, DateOfBirth) VALUES (@Id, @FirstName, @LastName, @Email, @DateOfBirth)", conn);
+                cmd.Parameters.AddWithValue("@Id", customer.Id);
+                cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+                cmd.Parameters.AddWithValue("@Email", customer.Email);
+                cmd.Parameters.AddWithValue("@DateOfBirth", customer.DateOfBirth.ToString("yyyy-MM-dd")); // Standardowy format daty
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // Metoda do wczytania wszystkich klientów z bazy przy starcie aplikacji
+        public void LoadCustomersFromDb()
+        {
+            _customers.Clear();
+            using (var conn = Database.GetConnection())
+            {
+                var cmd = new SQLiteCommand("SELECT * FROM Customers", conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var customer = new Customer(
+                            id: Convert.ToInt32(reader["Id"]),
+                            firstName: reader["FirstName"].ToString(),
+                            lastName: reader["LastName"].ToString(),
+                            email: reader["Email"].ToString(), // ✅ DODANO
+                            phone: reader["PhoneNumber"]?.ToString() ?? "", // ✅ DODANO
+                            dob: DateTime.Parse(reader["DateOfBirth"].ToString())
+                        );
+                        _customers.Add(customer);
+                    }
+                }
+            }
+            if (_customers.Any())
+            {
+                _nextId = _customers.Max(c => c.Id) + 1;
+            }
+        }
     }
 }

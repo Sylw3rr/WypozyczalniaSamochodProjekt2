@@ -1,4 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Data;
+using System.Data.SQLite;       // dla SQLiteConnection, SQLiteCommand
+using CarRentalSystem.Models;
+using CarRentalSystem.Interfaces;
+using CarRentalSystem.Utils;
+using System.Windows.Forms;
+
 namespace CarRentalSystem.Models
+
 {
     public class Customer
     {
@@ -19,12 +30,12 @@ namespace CarRentalSystem.Models
 
         public Customer(int id, string firstName, string lastName, string email, string phone, DateTime dob)
         {
-            Id = id;
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            PhoneNumber = phone;
-            DateOfBirth = dob;
+            this.Id = id;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Email = email;
+            this.PhoneNumber = phone;
+            this.DateOfBirth = dob;
         }
     }
 }

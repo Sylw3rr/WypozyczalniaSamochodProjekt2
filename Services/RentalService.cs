@@ -1,6 +1,12 @@
-using CarRentalSystem.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Data;
+using System.Data.SQLite;       // dla SQLiteConnection, SQLiteCommand
 using CarRentalSystem.Models;
-
+using CarRentalSystem.Interfaces;
+using CarRentalSystem.Utils;
+using System.Windows.Forms;
 namespace CarRentalSystem.Services
 {
     public class RentalService : IRentalService
@@ -62,5 +68,43 @@ namespace CarRentalSystem.Services
         {
             return _rentals.FirstOrDefault(r => r.VehicleId == vehicleId && r.Status == RentalStatus.Active);
         }
+        public void SaveRentalToDb(Rental rental)
+        {
+            using (var conn = Database.GetConnection())
+            {
+                var cmd = new SQLiteCommand("INSERT INTO Rentals (VehicleId, CustomerId, StartDate, EndDate, Status) VALUES (@VehicleId, @CustomerId, @StartDate, @EndDate, @Status)", conn);
+                cmd.Parameters.AddWithValue("@VehicleId", rental.VehicleId);
+                cmd.Parameters.AddWithValue("@CustomerId", rental.CustomerId);
+                cmd.Parameters.AddWithValue("@StartDate", rental.StartDate);
+                cmd.Parameters.AddWithValue("@EndDate", rental.EndDate);
+                cmd.Parameters.AddWithValue("@Status", rental.Status.ToString());
+                cmd.ExecuteNonQuery();
+            }
+        }
+        public void LoadRentalsFromDb()
+        {
+            using (var conn = Database.GetConnection())
+            {
+                var cmd = new SQLiteCommand("SELECT * FROM Rentals", conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var rental = new Rental
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            VehicleId = Convert.ToInt32(reader["VehicleId"]),
+                            CustomerId = Convert.ToInt32(reader["CustomerId"]),
+                            StartDate = DateTime.Parse(reader["StartDate"].ToString()),
+                            EndDate = DateTime.Parse(reader["EndDate"].ToString()),
+                            Status = (RentalStatus)Enum.Parse(typeof(RentalStatus), reader["Status"].ToString())
+                        };
+                        _rentals.Add(rental);
+                    }
+                }
+            }
+        }
+
+
     }
 }

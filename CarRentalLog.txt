@@ -1,0 +1,66 @@
+29.06.2025 13:40:22 [INFO] - Dodano pojazd: Toyota Corolla (2022) - WPR 12345
+29.06.2025 13:40:22 [INFO] - Dodano pojazd: Ford Mustang (2023) - GD 54321
+29.06.2025 13:40:22 [INFO] - Dodano pojazd: BMW X5 (2021) - KR 11223
+29.06.2025 13:40:22 [INFO] - Dodano klienta: Jan Kowalski
+29.06.2025 13:40:22 [INFO] - Dodano klienta: Anna Nowak
+29.06.2025 13:40:22 [INFO] - Załadowano dane pojazdów
+29.06.2025 13:40:22 [INFO] - Załadowano dane klientów
+29.06.2025 13:40:22 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 13:40:22 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 13:59:04 [INFO] - Dodano pojazd: Toyota Corolla (2022) - WPR 12345
+29.06.2025 13:59:04 [INFO] - Dodano pojazd: Ford Mustang (2023) - GD 54321
+29.06.2025 13:59:04 [INFO] - Dodano pojazd: BMW X5 (2021) - KR 11223
+29.06.2025 13:59:04 [INFO] - Dodano klienta: Jan Kowalski
+29.06.2025 13:59:04 [INFO] - Dodano klienta: Anna Nowak
+29.06.2025 13:59:04 [INFO] - Załadowano dane pojazdów
+29.06.2025 13:59:04 [INFO] - Załadowano dane klientów
+29.06.2025 13:59:04 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 13:59:04 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 13:59:16 [INFO] - Dodano pojazd: rffsa dsad2 (2025) - FAF13
+29.06.2025 13:59:16 [INFO] - Dodano nowy pojazd: rffsa dsad2
+29.06.2025 13:59:17 [INFO] - Załadowano dane pojazdów
+29.06.2025 13:59:23 [INFO] - Dodano pojazd: Toyota Corolla (2022) - WPR 12345
+29.06.2025 13:59:23 [INFO] - Dodano pojazd: Ford Mustang (2023) - GD 54321
+29.06.2025 13:59:23 [INFO] - Dodano pojazd: BMW X5 (2021) - KR 11223
+29.06.2025 13:59:23 [INFO] - Dodano klienta: Jan Kowalski
+29.06.2025 13:59:23 [INFO] - Dodano klienta: Anna Nowak
+29.06.2025 13:59:23 [INFO] - Załadowano dane pojazdów
+29.06.2025 13:59:23 [INFO] - Załadowano dane klientów
+29.06.2025 13:59:23 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 13:59:23 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 14:38:00 [INFO] - Dodano pojazd: Toyota Corolla (2022) - WPR 12345
+29.06.2025 14:38:00 [INFO] - Dodano pojazd: Ford Mustang (2023) - GD 54321
+29.06.2025 14:38:00 [INFO] - Dodano pojazd: BMW X5 (2021) - KR 11223
+29.06.2025 14:38:00 [INFO] - Dodano klienta: Jan Kowalski
+29.06.2025 14:38:00 [INFO] - Dodano klienta: Anna Nowak
+29.06.2025 14:38:00 [INFO] - Załadowano dane pojazdów
+29.06.2025 14:38:00 [INFO] - Załadowano dane klientów
+29.06.2025 14:38:00 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 14:38:00 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 14:38:12 [INFO] - Dodano pojazd: Fdfsa ffeq (2023) - 432FSDF
+29.06.2025 14:38:12 [INFO] - Dodano nowy pojazd: Fdfsa ffeq
+29.06.2025 14:38:13 [INFO] - Załadowano dane pojazdów
+29.06.2025 14:38:19 [INFO] - Dodano pojazd: Toyota Corolla (2022) - WPR 12345
+29.06.2025 14:38:19 [INFO] - Dodano pojazd: Ford Mustang (2023) - GD 54321
+29.06.2025 14:38:19 [INFO] - Dodano pojazd: BMW X5 (2021) - KR 11223
+29.06.2025 14:38:19 [INFO] - Dodano klienta: Jan Kowalski
+29.06.2025 14:38:19 [INFO] - Dodano klienta: Anna Nowak
+29.06.2025 14:38:19 [INFO] - Załadowano dane pojazdów
+29.06.2025 14:38:19 [INFO] - Załadowano dane klientów
+29.06.2025 14:38:19 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 14:38:19 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 14:38:52 [INFO] - Załadowano dane pojazdów
+29.06.2025 14:39:04 [INFO] - Usunięto pojazd: Fdfsa ffeq (2023) - 432FSDF
+29.06.2025 14:39:04 [INFO] - Załadowano dane pojazdów
+29.06.2025 14:39:04 [INFO] - Usunięto pojazd: Fdfsa ffeq
+29.06.2025 14:40:06 [INFO] - Załadowano dane pojazdów
+29.06.2025 14:40:06 [INFO] - Załadowano dane klientów
+29.06.2025 14:40:06 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 14:40:06 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 14:40:12 [INFO] - Usunięto pojazd: Fdfsa ffeq (2023) - 432FSDF
+29.06.2025 14:40:12 [INFO] - Załadowano dane pojazdów
+29.06.2025 14:40:12 [INFO] - Usunięto pojazd: Fdfsa ffeq
+29.06.2025 14:40:17 [INFO] - Załadowano dane pojazdów
+29.06.2025 14:40:17 [INFO] - Załadowano dane klientów
+29.06.2025 14:40:17 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 14:40:17 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie

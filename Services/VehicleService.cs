@@ -1,5 +1,12 @@
-using CarRentalSystem.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Data;
+using System.Data.SQLite;       // dla SQLiteConnection, SQLiteCommand
 using CarRentalSystem.Models;
+using CarRentalSystem.Interfaces;
+using CarRentalSystem.Utils;
+using System.Windows.Forms;
 
 namespace CarRentalSystem.Services
 {
@@ -13,20 +20,14 @@ namespace CarRentalSystem.Services
         {
             _logger = logger;
             _vehicles = new List<Vehicle>();
-            LoadSampleData();
         }
 
-        private void LoadSampleData()
-        {
-            AddVehicle(new Vehicle(0, "Toyota", "Corolla", 2022, "WPR 12345", 150, "Sedan"));
-            AddVehicle(new Vehicle(0, "Ford", "Mustang", 2023, "GD 54321", 400, "Sport"));
-            AddVehicle(new Vehicle(0, "BMW", "X5", 2021, "KR 11223", 350, "SUV"));
-        }
 
         public void AddVehicle(Vehicle vehicle)
         {
             vehicle.Id = _nextId++;
             _vehicles.Add(vehicle);
+            SaveVehicleToDb(vehicle);
             _logger.LogInfo($"Dodano pojazd: {vehicle}");
         }
 
@@ -36,7 +37,7 @@ namespace CarRentalSystem.Services
             if (vehicle != null)
             {
                 _vehicles.Remove(vehicle);
-                _logger.LogInfo($"Usuni�to pojazd: {vehicle}");
+                _logger.LogInfo($"Usunięto pojazd: {vehicle}");
             }
         }
 
@@ -49,22 +50,74 @@ namespace CarRentalSystem.Services
             if (vehicle != null)
             {
                 vehicle.IsAvailable = isAvailable;
-                _logger.LogInfo($"Zmieniono dost�pno�� pojazdu {vehicle.Id} na {isAvailable}");
+                _logger.LogInfo($"Zmieniono dostępność pojazdu {vehicle.Id} na {isAvailable}");
             }
         }
         public void UpdateVehicle(Vehicle vehicle)
         {
-            var existing = GetVehicleById(vehicle.Id);
-            if (existing != null)
+            var existingVehicle = _vehicles.FirstOrDefault(v => v.Id == vehicle.Id);
+            if (existingVehicle != null)
             {
-                existing.Make = vehicle.Make;
-                existing.Model = vehicle.Model;
-                existing.Year = vehicle.Year;
-                existing.LicensePlate = vehicle.LicensePlate;
-                existing.DailyRate = vehicle.DailyRate;
-                existing.Category = vehicle.Category;
-                _logger.LogInfo($"Zaktualizowano pojazd: {existing}");
+                
+                existingVehicle.Make = vehicle.Make;
+                existingVehicle.Model = vehicle.Model;
+                existingVehicle.Year = vehicle.Year;
+                existingVehicle.LicensePlate = vehicle.LicensePlate;
+                existingVehicle.DailyRate = vehicle.DailyRate;
+                existingVehicle.Category = vehicle.Category;
+                SaveVehicleToDb(existingVehicle);
+                _logger.LogInfo($"Zaktualizowano pojazd: {existingVehicle}");
+
             }
+        }
+        public void SaveVehicleToDb(Vehicle vehicle)
+        {
+            using (var conn = Database.GetConnection())
+            {
+                // "INSERT OR REPLACE" działa tak, że jeśli pojazd o danym ID już istnieje, zostanie zaktualizowany.
+                // Jeśli nie istnieje, zostanie dodany jako nowy.
+                var cmd = new SQLiteCommand("INSERT OR REPLACE INTO Vehicles (Id, Make, Model, Year, LicensePlate, DailyRate, Category, IsAvailable) VALUES (@Id, @Make, @Model, @Year, @LicensePlate, @DailyRate, @Category, @IsAvailable)", conn);
+                cmd.Parameters.AddWithValue("@Id", vehicle.Id);
+                cmd.Parameters.AddWithValue("@Make", vehicle.Make);
+                cmd.Parameters.AddWithValue("@Model", vehicle.Model);
+                cmd.Parameters.AddWithValue("@Year", vehicle.Year);
+                cmd.Parameters.AddWithValue("@LicensePlate", vehicle.LicensePlate);
+                cmd.Parameters.AddWithValue("@DailyRate", vehicle.DailyRate);
+                cmd.Parameters.AddWithValue("@Category", vehicle.Category);
+                cmd.Parameters.AddWithValue("@IsAvailable", vehicle.IsAvailable); // SQLite obsłuży bool jako 0 lub 1
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // Metoda do wczytania wszystkich pojazdów z bazy przy starcie aplikacji
+        public void LoadVehiclesFromDb()
+        {
+            _vehicles.Clear();
+            using (var conn = Database.GetConnection())
+            {
+                var cmd = new SQLiteCommand("SELECT * FROM Vehicles", conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var vehicle = new Vehicle(
+                            id: Convert.ToInt32(reader["Id"]),
+                            make: reader["Make"].ToString(),
+                            model: reader["Model"].ToString(),
+                            year: Convert.ToInt32(reader["Year"]),
+                            licensePlate: reader["LicensePlate"].ToString(),
+                            dailyRate: Convert.ToDecimal(reader["DailyRate"]),
+                            category: reader["Category"].ToString()
+                        )
+                        {
+                            IsAvailable = Convert.ToBoolean(reader["IsAvailable"])
+                        };
+                        _vehicles.Add(vehicle);
+                    }
+                }
+            }
+            if (_vehicles.Any())
+                _nextId = _vehicles.Max(v => v.Id) + 1;
         }
     }
 }
