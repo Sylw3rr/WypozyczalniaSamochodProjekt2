@@ -145,3 +145,53 @@
 29.06.2025 22:02:56 [INFO] - Załadowano dane klientów
 29.06.2025 22:02:56 [INFO] - Załadowano dane wypożyczeń
 29.06.2025 22:02:56 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:08:31 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:08:31 [INFO] - Załadowano dane klientów
+29.06.2025 22:08:31 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:08:31 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:09:55 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:09:55 [INFO] - Załadowano dane klientów
+29.06.2025 22:09:55 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:09:55 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:10:53 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:10:53 [INFO] - Załadowano dane klientów
+29.06.2025 22:10:53 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:10:53 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:10:59 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:12:18 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:12:18 [INFO] - Załadowano dane klientów
+29.06.2025 22:12:18 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:12:18 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:15:49 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:15:49 [INFO] - Załadowano dane klientów
+29.06.2025 22:15:49 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:15:49 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:16:18 [INFO] - Zmieniono dostępność pojazdu 1 na True
+29.06.2025 22:16:18 [INFO] - Zakończono wypożyczenie 2. Całkowity koszt: 150,00 zł
+29.06.2025 22:16:18 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:16:18 [INFO] - Załadowano dane klientów
+29.06.2025 22:16:18 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:16:18 [INFO] - Zakończono wypożyczenie 2
+29.06.2025 22:16:50 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:16:50 [INFO] - Załadowano dane klientów
+29.06.2025 22:16:50 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:16:50 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:17:09 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:17:09 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:17:15 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:17:15 [INFO] - Załadowano dane klientów
+29.06.2025 22:17:15 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:17:15 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:17:58 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:17:58 [INFO] - Załadowano dane klientów
+29.06.2025 22:17:58 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:17:58 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:35:18 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:35:18 [INFO] - Załadowano dane klientów
+29.06.2025 22:35:18 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:35:18 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:37:50 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:47:40 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:47:40 [INFO] - Załadowano dane klientów
+29.06.2025 22:47:40 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:47:40 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie

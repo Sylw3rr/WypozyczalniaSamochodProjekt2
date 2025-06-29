@@ -12,6 +12,8 @@ namespace CarRentalSystem.Forms
         // === POLA SERWISÓW ===
         private ICustomerService customerService;
         private ILogger logger;
+        private readonly Customer? _editingCustomer;
+        private readonly bool _isEditMode;
 
         // === KONTROLKI UI ===
         private TextBox txtFirstName;
@@ -50,7 +52,13 @@ namespace CarRentalSystem.Forms
             BackColor = Color.FromArgb(240, 248, 255);
             Font = new Font("Segoe UI", 9);
         }
-
+        public CustomerFormDialog(ICustomerService customerService, ILogger logger, Customer editingCustomer)
+       : this(customerService, logger)
+        {
+            _editingCustomer = editingCustomer;
+            _isEditMode = false;
+            Text = "✏️ Edytuj Klienta";
+        }
         private void CreateControls()
         {
             // Etykiety

@@ -91,10 +91,10 @@ namespace CarRentalSystem.Forms
             dashboardTab = new TabPage("📊 Dashboard");
             vehiclesTab = new TabPage("🚗 Pojazdy");
             customersTab = new TabPage("👥 Klienci");
-            rentalsTab = new TabPage("📋 Wypożyczenia");
+
 
             mainTabControl.TabPages.AddRange(new TabPage[] {
-                dashboardTab, vehiclesTab, customersTab, rentalsTab
+                dashboardTab, vehiclesTab, customersTab, 
             });
         }
 
@@ -145,7 +145,7 @@ namespace CarRentalSystem.Forms
                 _customerService.GetAllCustomers().Count().ToString(),
                 Color.FromArgb(255, 152, 0), new Point(540, 20));
 
-            revenueCard = CreateStatCard("📊 Wypożyczenia",
+            revenueCard = CreateStatCard("💸 Wypożyczenia",
                 _rentalService.GetAllRentals().Count().ToString(),
                 Color.FromArgb(156, 39, 176), new Point(800, 20));
 
@@ -595,7 +595,7 @@ namespace CarRentalSystem.Forms
         private void CreateRentalsTab()
         {
             // Tworzenie zakładki wypożyczeń
-            rentalsTab = new TabPage("🚗 Wypożyczenia");
+            rentalsTab = new TabPage("💸 Wypożyczenia");
             rentalsTab.UseVisualStyleBackColor = true;
             rentalsTab.BackColor = Color.FromArgb(250, 250, 250);
 

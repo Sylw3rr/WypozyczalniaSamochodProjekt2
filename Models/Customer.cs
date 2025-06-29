@@ -21,6 +21,11 @@ namespace CarRentalSystem.Models
         public DateTime DateOfBirth { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
+
+        public override string ToString()
+        {
+            return this.FullName;
+        }
         public int Age => DateTime.Now.Year - DateOfBirth.Year - (DateTime.Now.DayOfYear < DateOfBirth.DayOfYear ? 1 : 0);
 
         // DODANO BRAKUJ¥C¥ METODÊ
