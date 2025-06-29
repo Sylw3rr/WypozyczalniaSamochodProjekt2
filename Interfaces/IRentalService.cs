@@ -1,21 +1,33 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Data;
-using System.Data.SQLite;       // dla SQLiteConnection, SQLiteCommand
 using CarRentalSystem.Models;
-using CarRentalSystem.Interfaces;
-using CarRentalSystem.Utils;
-using System.Windows.Forms;
 
 namespace CarRentalSystem.Interfaces
 {
     public interface IRentalService
     {
+        // Podstawowe operacje CRUD
         Rental CreateRental(int vehicleId, int customerId, DateTime startDate, DateTime endDate);
-        void EndRental(int rentalId, DateTime returnDate);
+        void UpdateRental(Rental rental);
+        bool DeleteRental(int rentalId);
+        Rental GetRentalById(int rentalId);
         IEnumerable<Rental> GetAllRentals();
+
+        // Operacje biznesowe
+        void EndRental(int rentalId, DateTime returnDate, decimal additionalCharges = 0);
+        void CancelRental(int rentalId);
+        Rental GetActiveRental(int vehicleId);
+
+        // Zapytania filtruj¹ce
+        IEnumerable<Rental> GetActiveRentals();
+        IEnumerable<Rental> GetOverdueRentals();
+        IEnumerable<Rental> GetRentalsByCustomer(int customerId);
+        IEnumerable<Rental> GetRentalsByVehicle(int vehicleId);
+        IEnumerable<Rental> GetRentalsByStatus(RentalStatus status);
+
+        // Operacje bazodanowe
+        void SaveRentalToDb(Rental rental);
+        void DeleteRentalFromDb(int rentalId);
         void LoadRentalsFromDb();
-        Rental GetActiveRental(int vehicleId); // DODANO BRAKUJ¥C¥ METODÊ
     }
 }

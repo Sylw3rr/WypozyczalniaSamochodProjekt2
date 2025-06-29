@@ -1,16 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data;
-using System.Data.SQLite;       // dla SQLiteConnection, SQLiteCommand
-using CarRentalSystem.Models;
-using CarRentalSystem.Interfaces;
-using CarRentalSystem.Utils;
-using System.Windows.Forms;
 
 namespace CarRentalSystem.Models
 {
-    public enum RentalStatus { Pending, Active, Completed, Cancelled }
+    public enum RentalStatus
+    {
+        Pending,     // Oczekuj¹ce
+        Active,      // Aktywne
+        Completed,   // Zakoñczone
+        Cancelled    // Anulowane
+    }
 
     public class Rental
     {
@@ -20,13 +18,19 @@ namespace CarRentalSystem.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime? ActualReturnDate { get; set; }
+        public RentalStatus Status { get; set; } = RentalStatus.Pending;
         public decimal TotalCost { get; set; }
-        public decimal? AdditionalCharges { get; set; }
-        public RentalStatus Status { get; set; }
+        public decimal AdditionalCharges { get; set; } = 0;
 
-        public Rental()
+        // Obliczane w³aœciwoœci
+        public int PlannedDays => (EndDate - StartDate).Days + 1;
+        public int? ActualDays => ActualReturnDate?.Subtract(StartDate).Days + 1;
+        public bool IsOverdue => Status == RentalStatus.Active && DateTime.Now > EndDate;
+        public decimal FinalCost => TotalCost + AdditionalCharges;
+
+        public override string ToString()
         {
-            Status = RentalStatus.Pending;
+            return $"Wypo¿yczenie #{Id} - Status: {Status}";
         }
     }
 }

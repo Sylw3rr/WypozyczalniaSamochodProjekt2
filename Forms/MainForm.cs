@@ -14,40 +14,41 @@ namespace CarRentalSystem.Forms
         private readonly IRentalService _rentalService;
         private readonly ILogger _logger;
 
-        private TabControl mainTabControl;
-        private TabPage dashboardTab;
-        private TabPage vehiclesTab;
-        private TabPage customersTab;
-        private TabPage rentalsTab;
+        private TabControl mainTabControl = null!;
+        private TabPage dashboardTab = null!;
+        private TabPage vehiclesTab = null!;
+        private TabPage customersTab = null!;
+        private TabPage rentalsTab = null!;
 
         // Dashboard controls
-        private Panel dashboardPanel;
-        private Label titleLabel;
-        private Panel statsPanel;
-        private Panel availableVehiclesCard;
-        private Panel totalRentalsCard;
-        private Panel totalCustomersCard;
-        private Panel revenueCard;
+        private Panel dashboardPanel = null!;
+        private Label titleLabel = null!;
+        private Panel statsPanel = null!;
+        private Panel availableVehiclesCard = null!;
+        private Panel totalRentalsCard = null!;
+        private Panel totalCustomersCard = null!;
+        private Panel revenueCard = null!;
 
         // Vehicle controls
-        private DataGridView vehiclesGrid;
-        private Button addVehicleBtn;
-        private Button editVehicleBtn;
-        private Button deleteVehicleBtn;
-        private Button refreshVehiclesBtn;
-        private TextBox searchVehiclesBox;
-        private Label searchVehiclesLabel;
+        private DataGridView vehiclesGrid = null!;
+        private Button addVehicleBtn = null!;
+        private Button editVehicleBtn = null!;
+        private Button deleteVehicleBtn = null!;
+        private Button refreshVehiclesBtn = null!;
+        private TextBox searchVehiclesBox = null!;
+        private Label searchVehiclesLabel = null!;
 
         // Customer controls
-        private DataGridView customersGrid;
-        private Button addCustomerBtn;
-        private Button refreshCustomersBtn;
+        private DataGridView customersGrid = null!;
+        private Button addCustomerBtn = null!;
+        private Button refreshCustomersBtn = null!;
 
         // Rental controls
-        private DataGridView rentalsGrid;
-        private Button createRentalBtn;
-        private Button endRentalBtn;
-        private Button refreshRentalsBtn;
+        private DataGridView rentalsGrid = null!;
+        private DataGridView dgvRentals = null!;
+        private Button createRentalBtn = null!;
+        private Button endRentalBtn = null!;
+        private Button refreshRentalsBtn = null!;
 
         public MainForm(IVehicleService vehicleService, ICustomerService customerService,
                        IRentalService rentalService, ILogger logger)
@@ -58,6 +59,7 @@ namespace CarRentalSystem.Forms
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             InitializeComponent();
+            SetupRentalsDataGridView();
             LoadAllData();
             _logger.LogInfo("Aplikacja CarRentalSystem uruchomiona pomyślnie");
         }
@@ -287,20 +289,51 @@ namespace CarRentalSystem.Forms
             endRentalBtn.Click += EndRentalBtn_Click;
             refreshRentalsBtn.Click += (s, e) => LoadRentalData();
 
-            rentalsGrid = new DataGridView
+            // Użyj dgvRentals zamiast rentalsGrid dla spójności
+            dgvRentals = new DataGridView
             {
                 Location = new Point(20, 70),
                 Size = new Size(1120, 540),
-                AutoGenerateColumns = true,
+                AutoGenerateColumns = false,
                 AllowUserToAddRows = false,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
                 ReadOnly = true,
-                BackgroundColor = Color.White
+                BackgroundColor = Color.White,
+                MultiSelect = false
             };
 
             rentalsTab.Controls.AddRange(new Control[] {
-                createRentalBtn, endRentalBtn, refreshRentalsBtn, rentalsGrid
+                createRentalBtn, endRentalBtn, refreshRentalsBtn, dgvRentals
             });
+        }
+
+        private void SetupRentalsDataGridView()
+        {
+            if (dgvRentals == null) return;
+
+            dgvRentals.Columns.Clear();
+
+            dgvRentals.Columns.Add("Id", "ID");
+            dgvRentals.Columns.Add("VehicleInfo", "Pojazd");
+            dgvRentals.Columns.Add("CustomerInfo", "Klient");
+            dgvRentals.Columns.Add("StartDate", "Data od");
+            dgvRentals.Columns.Add("EndDate", "Data do");
+            dgvRentals.Columns.Add("Status", "Status");
+            dgvRentals.Columns.Add("TotalCost", "Koszt");
+
+            // Ustawienia szerokości kolumn
+            dgvRentals.Columns["Id"].Width = 50;
+            dgvRentals.Columns["VehicleInfo"].Width = 150;
+            dgvRentals.Columns["CustomerInfo"].Width = 120;
+            dgvRentals.Columns["StartDate"].Width = 100;
+            dgvRentals.Columns["EndDate"].Width = 100;
+            dgvRentals.Columns["Status"].Width = 80;
+            dgvRentals.Columns["TotalCost"].Width = 80;
+
+            // Formatowanie kolumn dat
+            dgvRentals.Columns["StartDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
+            dgvRentals.Columns["EndDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
+            dgvRentals.Columns["TotalCost"].DefaultCellStyle.Format = "C2";
         }
 
         private Button CreateStyledButton(string text, Point location, Color color)
@@ -361,8 +394,44 @@ namespace CarRentalSystem.Forms
         {
             try
             {
-                rentalsGrid.DataSource = null;
-                rentalsGrid.DataSource = _rentalService.GetAllRentals().ToList();
+                if (dgvRentals == null) return;
+
+                dgvRentals.Rows.Clear();
+
+                foreach (var rental in _rentalService.GetAllRentals())
+                {
+                    var vehicle = _vehicleService.GetVehicleById(rental.VehicleId);
+                    var customer = _customerService.GetCustomerById(rental.CustomerId);
+
+                    string vehicleInfo = vehicle != null ? $"{vehicle.Make} {vehicle.Model}" : "Nieznany";
+                    string customerInfo = customer != null ? customer.FullName : "Nieznany";
+
+                    dgvRentals.Rows.Add(
+                        rental.Id,
+                        vehicleInfo,
+                        customerInfo,
+                        rental.StartDate.ToShortDateString(),
+                        rental.EndDate.ToShortDateString(),
+                        rental.Status.ToString(),
+                        rental.TotalCost.ToString("C2")
+                    );
+
+                    // Kolorowanie wierszy według statusu
+                    var row = dgvRentals.Rows[dgvRentals.Rows.Count - 1];
+                    switch (rental.Status)
+                    {
+                        case RentalStatus.Active:
+                            row.DefaultCellStyle.BackColor = Color.LightGreen;
+                            break;
+                        case RentalStatus.Completed:
+                            row.DefaultCellStyle.BackColor = Color.LightBlue;
+                            break;
+                        case RentalStatus.Cancelled:
+                            row.DefaultCellStyle.BackColor = Color.LightCoral;
+                            break;
+                    }
+                }
+
                 _logger.LogInfo("Załadowano dane wypożyczeń");
             }
             catch (Exception ex)
@@ -388,8 +457,10 @@ namespace CarRentalSystem.Forms
         }
 
         // Event Handlers
-        private void SearchVehiclesBox_TextChanged(object sender, EventArgs e)
+        private void SearchVehiclesBox_TextChanged(object? sender, EventArgs e)
         {
+            if (searchVehiclesBox == null) return;
+
             string searchText = searchVehiclesBox.Text.ToLower();
             var filteredVehicles = _vehicleService.GetAllVehicles()
                 .Where(v => v.Make.ToLower().Contains(searchText) ||
@@ -399,7 +470,7 @@ namespace CarRentalSystem.Forms
             vehiclesGrid.DataSource = filteredVehicles;
         }
 
-        private void AddVehicleBtn_Click(object sender, EventArgs e)
+        private void AddVehicleBtn_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -417,7 +488,7 @@ namespace CarRentalSystem.Forms
             }
         }
 
-        private void EditVehicleBtn_Click(object sender, EventArgs e)
+        private void EditVehicleBtn_Click(object? sender, EventArgs e)
         {
             if (vehiclesGrid.SelectedRows.Count > 0)
             {
@@ -443,7 +514,7 @@ namespace CarRentalSystem.Forms
             }
         }
 
-        private void DeleteVehicleBtn_Click(object sender, EventArgs e)
+        private void DeleteVehicleBtn_Click(object? sender, EventArgs e)
         {
             if (vehiclesGrid.SelectedRows.Count > 0)
             {
@@ -473,11 +544,11 @@ namespace CarRentalSystem.Forms
             }
         }
 
-        private void AddCustomerBtn_Click(object sender, EventArgs e)
+        private void AddCustomerBtn_Click(object? sender, EventArgs e)
         {
             try
             {
-                var customerForm = new CustomerForm(_customerService, _logger);
+                var customerForm = new CustomerFormDialog(_customerService, _logger);
                 if (customerForm.ShowDialog() == DialogResult.OK)
                 {
                     LoadCustomerData();
@@ -491,30 +562,46 @@ namespace CarRentalSystem.Forms
             }
         }
 
-        private void CreateRentalBtn_Click(object sender, EventArgs e)
+        private void CreateRentalBtn_Click(object? sender, EventArgs e)
         {
             try
             {
-                MessageBox.Show("Funkcja tworzenia wypożyczenia będzie dostępna wkrótce", "Informacja",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                using var form = new RentalForm(
+                    _vehicleService,
+                    _customerService,
+                    _rentalService,
+                    _logger);
+
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    LoadRentalData();
+                    RefreshDashboardStats();
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError("Błąd tworzenia wypożyczenia", ex);
-                MessageBox.Show("Błąd tworzenia wypożyczenia", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Błąd tworzenia wypożyczenia", "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void EndRentalBtn_Click(object sender, EventArgs e)
+        private void EndRentalBtn_Click(object? sender, EventArgs e)
         {
-            if (rentalsGrid.SelectedRows.Count > 0)
+            if (dgvRentals?.SelectedRows.Count > 0)
             {
                 try
                 {
-                    var selectedRental = (Rental)rentalsGrid.SelectedRows[0].DataBoundItem;
-                    _rentalService.EndRental(selectedRental.Id, DateTime.Now);
-                    LoadAllData();
-                    _logger.LogInfo($"Zakończono wypożyczenie {selectedRental.Id}");
+                    var selectedRow = dgvRentals.SelectedRows[0];
+                    int rentalId = Convert.ToInt32(selectedRow.Cells["Id"].Value);
+                    var rental = _rentalService.GetRentalById(rentalId);
+
+                    if (rental != null)
+                    {
+                        _rentalService.EndRental(rentalId, DateTime.Now);
+                        LoadAllData();
+                        _logger.LogInfo($"Zakończono wypożyczenie {rental.Id}");
+                    }
                 }
                 catch (Exception ex)
                 {

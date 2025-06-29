@@ -1,371 +1,360 @@
 ﻿using CarRentalSystem.Interfaces;
 using CarRentalSystem.Models;
 using CarRentalSystem.Utils;
-using System.Windows.Forms;     // dla Form, Label, Panel, TextBox, Button, DateTimePicker
-using System.Drawing;           // dla Color, Font, itd.
-using System.Data.SQLite;
 using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Data;
+using System.Windows.Forms;
 
 namespace CarRentalSystem.Forms
 {
-    public partial class CustomerForm : Form
+    public class RentalForm : Form
     {
+        private readonly IRentalService _rentalService;
+        private readonly IVehicleService _vehicleService;
         private readonly ICustomerService _customerService;
         private readonly ILogger _logger;
+        private Rental _editingRental;
+        private bool _isEditMode;
 
-        // Kontrolki UI
-        private Label titleLabel;
-        private Panel mainPanel;
-        private Panel buttonPanel;
-        private Label firstNameLabel;
-        private TextBox firstNameTextBox;
-        private Label lastNameLabel;
-        private TextBox lastNameTextBox;
-        private Label emailLabel;
-        private TextBox emailTextBox;
-        private Label phoneLabel;
-        private TextBox phoneTextBox;
-        private Label dobLabel;
-        private DateTimePicker dobDateTimePicker;
-        private Label ageInfoLabel;
-        private Button saveButton;
-        private Button cancelButton;
+        // Kontrolki UI - teraz będą używane
+        private ComboBox cmbVehicle;
+        private ComboBox cmbCustomer;
+        private DateTimePicker dtpStartDate;
+        private DateTimePicker dtpEndDate;
+        private DateTimePicker dtpActualReturn;
+        private ComboBox cmbStatus;
+        private NumericUpDown nudAdditionalCharges;
+        private Label lblTotalCost;
+        private Button btnSave;
+        private Button btnCancel;
+        private Panel pnActualReturn;
 
-        public CustomerForm(ICustomerService customerService, ILogger logger)
+        public RentalForm(
+            IVehicleService vehicleService,
+            ICustomerService customerService,
+            IRentalService rentalService,
+            ILogger logger,
+            Rental editingRental = null)
         {
+            _vehicleService = vehicleService ?? throw new ArgumentNullException(nameof(vehicleService));
             _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
+            _rentalService = rentalService ?? throw new ArgumentNullException(nameof(rentalService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
+            _editingRental = editingRental;
+            _isEditMode = editingRental != null;
+
             InitializeComponent();
-            SetupForm();
+            LoadData();
         }
 
         private void InitializeComponent()
         {
-            // Ustawienia formularza
-            this.Text = "👥 Dodaj Nowego Klienta";
-            this.Size = new Size(500, 500);
+            this.Text = _isEditMode ? "✏️ Edytuj Wypożyczenie" : "➕ Nowe Wypożyczenie";
+            this.Size = new Size(500, 450);
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.BackColor = Color.FromArgb(240, 244, 248);
+            this.BackColor = Color.White;
 
-            // Tytuł
-            titleLabel = new Label();
-            titleLabel.Text = "👥 Dodawanie Nowego Klienta";
-            titleLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            titleLabel.ForeColor = Color.FromArgb(37, 99, 235);
-            titleLabel.Size = new Size(460, 40);
-            titleLabel.Location = new Point(20, 20);
-            titleLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // Pojazd
+            var lblVehicle = new Label
+            {
+                Text = "Pojazd:",
+                Location = new Point(20, 20),
+                AutoSize = true
+            };
+            cmbVehicle = new ComboBox
+            {
+                Location = new Point(120, 18),
+                Width = 320,
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
 
-            // Panel główny
-            mainPanel = new Panel();
-            mainPanel.Location = new Point(20, 80);
-            mainPanel.Size = new Size(440, 340);
-            mainPanel.BackColor = Color.White;
-            mainPanel.BorderStyle = BorderStyle.FixedSingle;
+            // Klient
+            var lblCustomer = new Label
+            {
+                Text = "Klient:",
+                Location = new Point(20, 60),
+                AutoSize = true
+            };
+            cmbCustomer = new ComboBox
+            {
+                Location = new Point(120, 58),
+                Width = 320,
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
 
-            CreateFormControls();
+            // Data rozpoczęcia
+            var lblStartDate = new Label
+            {
+                Text = "Data od:",
+                Location = new Point(20, 100),
+                AutoSize = true
+            };
+            dtpStartDate = new DateTimePicker
+            {
+                Location = new Point(120, 98),
+                Format = DateTimePickerFormat.Short
+            };
+            dtpStartDate.ValueChanged += (s, e) => CalculateTotalCost();
 
-            // Panel z przyciskami
-            buttonPanel = new Panel();
-            buttonPanel.Location = new Point(20, 440);
-            buttonPanel.Size = new Size(440, 50);
-            buttonPanel.BackColor = Color.Transparent;
+            // Data zakończenia
+            var lblEndDate = new Label
+            {
+                Text = "Data do:",
+                Location = new Point(20, 140),
+                AutoSize = true
+            };
+            dtpEndDate = new DateTimePicker
+            {
+                Location = new Point(120, 138),
+                Format = DateTimePickerFormat.Short
+            };
+            dtpEndDate.ValueChanged += (s, e) => CalculateTotalCost();
 
-            saveButton = new Button();
-            saveButton.Text = "👥 Dodaj Klienta";
-            saveButton.Size = new Size(150, 40);
-            saveButton.Location = new Point(140, 5);
-            saveButton.BackColor = Color.FromArgb(34, 197, 94);
-            saveButton.ForeColor = Color.White;
-            saveButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            saveButton.FlatStyle = FlatStyle.Flat;
-            saveButton.FlatAppearance.BorderSize = 0;
-            saveButton.Cursor = Cursors.Hand;
-            saveButton.Click += SaveButton_Click;
+            // Status
+            var lblStatus = new Label
+            {
+                Text = "Status:",
+                Location = new Point(20, 180),
+                AutoSize = true
+            };
+            cmbStatus = new ComboBox
+            {
+                Location = new Point(120, 178),
+                Width = 150,
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
+            cmbStatus.Items.AddRange(Enum.GetNames(typeof(RentalStatus)));
+            cmbStatus.SelectedIndexChanged += CmbStatus_SelectedIndexChanged;
 
-            cancelButton = new Button();
-            cancelButton.Text = "❌ Anuluj";
-            cancelButton.Size = new Size(120, 40);
-            cancelButton.Location = new Point(300, 5);
-            cancelButton.BackColor = Color.FromArgb(107, 114, 128);
-            cancelButton.ForeColor = Color.White;
-            cancelButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            cancelButton.FlatStyle = FlatStyle.Flat;
-            cancelButton.FlatAppearance.BorderSize = 0;
-            cancelButton.Cursor = Cursors.Hand;
-            cancelButton.Click += CancelButton_Click;
+            // Panel dla rzeczywistej daty zwrotu
+            pnActualReturn = new Panel
+            {
+                Location = new Point(20, 220),
+                Size = new Size(420, 30),
+                Visible = _isEditMode
+            };
 
-            buttonPanel.Controls.AddRange(new Control[] { saveButton, cancelButton });
+            var lblActualReturn = new Label
+            {
+                Text = "Rzeczywisty zwrot:",
+                Location = new Point(0, 5),
+                AutoSize = true
+            };
+            dtpActualReturn = new DateTimePicker
+            {
+                Location = new Point(120, 2),
+                Format = DateTimePickerFormat.Short
+            };
 
-            this.Controls.AddRange(new Control[] { titleLabel, mainPanel, buttonPanel });
-        }
+            pnActualReturn.Controls.AddRange(new Control[] { lblActualReturn, dtpActualReturn });
 
-        private void CreateFormControls()
-        {
-            int yPosition = 30;
-            int labelHeight = 25;
-            int controlHeight = 30;
-            int spacing = 45;
-            int leftMargin = 30;
-            int controlWidth = 380;
+            // Dodatkowe opłaty
+            var lblAdditional = new Label
+            {
+                Text = "Dodatkowe opłaty:",
+                Location = new Point(20, 260),
+                AutoSize = true
+            };
+            nudAdditionalCharges = new NumericUpDown
+            {
+                Location = new Point(120, 258),
+                Width = 100,
+                DecimalPlaces = 2,
+                Maximum = 10000,
+                Minimum = 0
+            };
+            nudAdditionalCharges.ValueChanged += (s, e) => CalculateTotalCost();
 
-            // Imię
-            firstNameLabel = new Label();
-            firstNameLabel.Text = "👤 Imię:";
-            firstNameLabel.Location = new Point(leftMargin, yPosition);
-            firstNameLabel.Size = new Size(100, labelHeight);
-            firstNameLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            // Całkowity koszt
+            lblTotalCost = new Label
+            {
+                Text = "Całkowity koszt: 0,00 zł",
+                Location = new Point(20, 300),
+                AutoSize = true,
+                Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold)
+            };
 
-            firstNameTextBox = new TextBox();
-            firstNameTextBox.Location = new Point(leftMargin, yPosition + 25);
-            firstNameTextBox.Size = new Size(controlWidth, controlHeight);
-            firstNameTextBox.Font = new Font("Segoe UI", 10F);
+            // Przyciski
+            btnSave = new Button
+            {
+                Text = _isEditMode ? "Aktualizuj" : "Zapisz",
+                Location = new Point(150, 350),
+                Size = new Size(100, 35),
+                BackColor = Color.FromArgb(76, 175, 80),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnSave.Click += BtnSave_Click;
 
-            yPosition += spacing + 25;
+            btnCancel = new Button
+            {
+                Text = "Anuluj",
+                Location = new Point(270, 350),
+                Size = new Size(100, 35),
+                BackColor = Color.FromArgb(244, 67, 54),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                DialogResult = DialogResult.Cancel
+            };
 
-            // Nazwisko
-            lastNameLabel = new Label();
-            lastNameLabel.Text = "👤 Nazwisko:";
-            lastNameLabel.Location = new Point(leftMargin, yPosition);
-            lastNameLabel.Size = new Size(100, labelHeight);
-            lastNameLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-
-            lastNameTextBox = new TextBox();
-            lastNameTextBox.Location = new Point(leftMargin, yPosition + 25);
-            lastNameTextBox.Size = new Size(controlWidth, controlHeight);
-            lastNameTextBox.Font = new Font("Segoe UI", 10F);
-
-            yPosition += spacing + 25;
-
-            // Email
-            emailLabel = new Label();
-            emailLabel.Text = "📧 Email:";
-            emailLabel.Location = new Point(leftMargin, yPosition);
-            emailLabel.Size = new Size(100, labelHeight);
-            emailLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-
-            emailTextBox = new TextBox();
-            emailTextBox.Location = new Point(leftMargin, yPosition + 25);
-            emailTextBox.Size = new Size(controlWidth, controlHeight);
-            emailTextBox.Font = new Font("Segoe UI", 10F);
-
-            yPosition += spacing + 25;
-
-            // Telefon
-            phoneLabel = new Label();
-            phoneLabel.Text = "📞 Telefon:";
-            phoneLabel.Location = new Point(leftMargin, yPosition);
-            phoneLabel.Size = new Size(100, labelHeight);
-            phoneLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-
-            phoneTextBox = new TextBox();
-            phoneTextBox.Location = new Point(leftMargin, yPosition + 25);
-            phoneTextBox.Size = new Size(controlWidth, controlHeight);
-            phoneTextBox.Font = new Font("Segoe UI", 10F);
-
-            yPosition += spacing + 25;
-
-            // Data urodzenia
-            dobLabel = new Label();
-            dobLabel.Text = "🎂 Data urodzenia:";
-            dobLabel.Location = new Point(leftMargin, yPosition);
-            dobLabel.Size = new Size(150, labelHeight);
-            dobLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-
-            dobDateTimePicker = new DateTimePicker();
-            dobDateTimePicker.Location = new Point(leftMargin, yPosition + 25);
-            dobDateTimePicker.Size = new Size(200, controlHeight);
-            dobDateTimePicker.Font = new Font("Segoe UI", 10F);
-            dobDateTimePicker.Format = DateTimePickerFormat.Short;
-            dobDateTimePicker.MaxDate = DateTime.Now.AddYears(-16); // Minimalny wiek 16 lat
-            dobDateTimePicker.MinDate = DateTime.Now.AddYears(-100); // Maksymalny wiek 100 lat
-            dobDateTimePicker.Value = DateTime.Now.AddYears(-25); // Domyślnie 25 lat
-            dobDateTimePicker.ValueChanged += DobDateTimePicker_ValueChanged;
-
-            // Informacja o wieku
-            ageInfoLabel = new Label();
-            ageInfoLabel.Location = new Point(leftMargin + 220, yPosition + 25);
-            ageInfoLabel.Size = new Size(180, 30);
-            ageInfoLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            ageInfoLabel.ForeColor = Color.FromArgb(107, 114, 128);
-            UpdateAgeInfo();
-
-            mainPanel.Controls.AddRange(new Control[] {
-                firstNameLabel, firstNameTextBox,
-                lastNameLabel, lastNameTextBox,
-                emailLabel, emailTextBox,
-                phoneLabel, phoneTextBox,
-                dobLabel, dobDateTimePicker, ageInfoLabel
+            // Dodaj wszystkie kontrolki do formularza
+            this.Controls.AddRange(new Control[]
+            {
+                lblVehicle, cmbVehicle,
+                lblCustomer, cmbCustomer,
+                lblStartDate, dtpStartDate,
+                lblEndDate, dtpEndDate,
+                lblStatus, cmbStatus,
+                pnActualReturn,
+                lblAdditional, nudAdditionalCharges,
+                lblTotalCost,
+                btnSave, btnCancel
             });
         }
 
-        private void SetupForm()
+        private void LoadData()
         {
-            // Dodanie efektów hover do przycisków
-            saveButton.MouseEnter += (s, e) => saveButton.BackColor = ControlPaint.Dark(Color.FromArgb(34, 197, 94), 0.1f);
-            saveButton.MouseLeave += (s, e) => saveButton.BackColor = Color.FromArgb(34, 197, 94);
-
-            cancelButton.MouseEnter += (s, e) => cancelButton.BackColor = ControlPaint.Dark(Color.FromArgb(107, 114, 128), 0.1f);
-            cancelButton.MouseLeave += (s, e) => cancelButton.BackColor = Color.FromArgb(107, 114, 128);
-
-            // Ustawienie klawisza Enter jako domyślnego
-            this.AcceptButton = saveButton;
-            this.CancelButton = cancelButton;
-        }
-
-        private void DobDateTimePicker_ValueChanged(object sender, EventArgs e)
-        {
-            UpdateAgeInfo();
-        }
-
-        private void UpdateAgeInfo()
-        {
-            var age = DateTime.Now.Year - dobDateTimePicker.Value.Year;
-            if (DateTime.Now.DayOfYear < dobDateTimePicker.Value.DayOfYear)
-                age--;
-
-            ageInfoLabel.Text = $"Wiek: {age} lat";
-
-            if (age < 18)
+            // Załaduj pojazdy
+            cmbVehicle.Items.Clear();
+            foreach (var vehicle in _vehicleService.GetAllVehicles())
             {
-                ageInfoLabel.ForeColor = Color.FromArgb(239, 68, 68);
-                ageInfoLabel.Text += " ⚠️ Za młody";
+                if (!_isEditMode && !vehicle.IsAvailable) continue;
+                cmbVehicle.Items.Add(vehicle);
             }
-            else if (age > 75)
+
+            // Załaduj klientów
+            cmbCustomer.Items.Clear();
+            foreach (var customer in _customerService.GetAllCustomers())
             {
-                ageInfoLabel.ForeColor = Color.FromArgb(239, 68, 68);
-                ageInfoLabel.Text += " ⚠️ Za stary";
+                cmbCustomer.Items.Add(customer);
+            }
+
+            if (_isEditMode && _editingRental != null)
+            {
+                // Wypełnij danymi w trybie edycji
+                var vehicle = _vehicleService.GetVehicleById(_editingRental.VehicleId);
+                var customer = _customerService.GetCustomerById(_editingRental.CustomerId);
+
+                cmbVehicle.SelectedItem = vehicle;
+                cmbCustomer.SelectedItem = customer;
+                dtpStartDate.Value = _editingRental.StartDate;
+                dtpEndDate.Value = _editingRental.EndDate;
+                cmbStatus.SelectedItem = _editingRental.Status.ToString();
+                nudAdditionalCharges.Value = _editingRental.AdditionalCharges;
+
+                if (_editingRental.ActualReturnDate.HasValue)
+                {
+                    dtpActualReturn.Value = _editingRental.ActualReturnDate.Value;
+                }
+
+                // W trybie edycji nie można zmieniać pojazdu i klienta
+                cmbVehicle.Enabled = false;
+                cmbCustomer.Enabled = false;
             }
             else
             {
-                ageInfoLabel.ForeColor = Color.FromArgb(34, 197, 94);
-                ageInfoLabel.Text += " ✅ OK";
+                // Tryb dodawania
+                dtpStartDate.Value = DateTime.Now.Date;
+                dtpEndDate.Value = DateTime.Now.Date.AddDays(1);
+                cmbStatus.SelectedItem = RentalStatus.Active.ToString();
+
+                if (cmbVehicle.Items.Count > 0) cmbVehicle.SelectedIndex = 0;
+                if (cmbCustomer.Items.Count > 0) cmbCustomer.SelectedIndex = 0;
+            }
+
+            CalculateTotalCost();
+        }
+
+        private void CmbStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var status = (RentalStatus)Enum.Parse(typeof(RentalStatus), cmbStatus.SelectedItem.ToString());
+            pnActualReturn.Visible = status == RentalStatus.Completed;
+        }
+
+        private void CalculateTotalCost()
+        {
+            if (cmbVehicle.SelectedItem is Vehicle vehicle)
+            {
+                int days = Math.Max(1, (dtpEndDate.Value.Date - dtpStartDate.Value.Date).Days + 1);
+                decimal totalCost = days * vehicle.DailyRate + nudAdditionalCharges.Value;
+                lblTotalCost.Text = $"Całkowity koszt: {totalCost:C}";
             }
         }
 
-        private void SaveButton_Click(object sender, EventArgs e)
+        private void BtnSave_Click(object sender, EventArgs e)
         {
             try
             {
-                // Walidacja danych
-                if (!ValidateInput())
+                if (cmbVehicle.SelectedItem == null || cmbCustomer.SelectedItem == null)
                 {
+                    MessageBox.Show("Wybierz pojazd i klienta", "Uwaga",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Tworzenie nowego klienta
-                var customer = new Customer
+                var vehicle = (Vehicle)cmbVehicle.SelectedItem;
+                var customer = (Customer)cmbCustomer.SelectedItem;
+                var status = (RentalStatus)Enum.Parse(typeof(RentalStatus), cmbStatus.SelectedItem.ToString());
+
+                if (dtpStartDate.Value >= dtpEndDate.Value)
                 {
-                    FirstName = firstNameTextBox.Text.Trim(),
-                    LastName = lastNameTextBox.Text.Trim(),
-                    Email = emailTextBox.Text.Trim(),
-                    PhoneNumber = phoneTextBox.Text.Trim(),
-                    DateOfBirth = dobDateTimePicker.Value
-                };
+                    MessageBox.Show("Data końcowa musi być późniejsza niż początkowa", "Uwaga",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                _customerService.AddCustomer(customer);
-                _logger.LogInfo($"Dodano nowego klienta: {customer.FullName} ({customer.Email})");
+                if (_isEditMode)
+                {
+                    // Aktualizacja istniejącego wypożyczenia
+                    _editingRental.StartDate = dtpStartDate.Value.Date;
+                    _editingRental.EndDate = dtpEndDate.Value.Date;
+                    _editingRental.Status = status;
+                    _editingRental.AdditionalCharges = nudAdditionalCharges.Value;
 
-                MessageBox.Show($"Klient {customer.FullName} został pomyślnie dodany!", "Sukces",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (pnActualReturn.Visible)
+                    {
+                        _editingRental.ActualReturnDate = dtpActualReturn.Value.Date;
+                    }
+
+                    int days = (_editingRental.EndDate - _editingRental.StartDate).Days + 1;
+                    _editingRental.TotalCost = days * vehicle.DailyRate;
+
+                    _rentalService.UpdateRental(_editingRental);
+                    MessageBox.Show("Wypożyczenie zostało zaktualizowane", "Sukces",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    // Tworzenie nowego wypożyczenia
+                    var rental = _rentalService.CreateRental(
+                        vehicle.Id,
+                        customer.Id,
+                        dtpStartDate.Value.Date,
+                        dtpEndDate.Value.Date);
+
+                    if (nudAdditionalCharges.Value > 0)
+                    {
+                        rental.AdditionalCharges = nudAdditionalCharges.Value;
+                        _rentalService.UpdateRental(rental);
+                    }
+
+                    MessageBox.Show($"Wypożyczenie #{rental.Id} zostało utworzone", "Sukces",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Błąd podczas dodawania klienta: {ex.Message}", ex);
-                MessageBox.Show($"Wystąpił błąd podczas dodawania klienta:\n{ex.Message}",
-                    "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _logger.LogError("Błąd zapisu wypożyczenia", ex);
+                MessageBox.Show(ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private bool ValidateInput()
-        {
-            // Walidacja imienia
-            if (string.IsNullOrWhiteSpace(firstNameTextBox.Text))
-            {
-                MessageBox.Show("Proszę wprowadzić imię klienta.", "Błąd walidacji",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                firstNameTextBox.Focus();
-                return false;
-            }
-
-            // Walidacja nazwiska
-            if (string.IsNullOrWhiteSpace(lastNameTextBox.Text))
-            {
-                MessageBox.Show("Proszę wprowadzić nazwisko klienta.", "Błąd walidacji",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                lastNameTextBox.Focus();
-                return false;
-            }
-
-            // Walidacja email (używając DataValidator)
-            if (string.IsNullOrWhiteSpace(emailTextBox.Text) || !DataValidator.IsValidEmail(emailTextBox.Text))
-            {
-                MessageBox.Show("Proszę wprowadzić prawidłowy adres email.", "Błąd walidacji",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                emailTextBox.Focus();
-                return false;
-            }
-
-            // Sprawdzenie unikalności email
-            var existingCustomers = _customerService.GetAllCustomers();
-            var duplicateEmail = existingCustomers.FirstOrDefault(c =>
-                c.Email.Equals(emailTextBox.Text.Trim(), StringComparison.OrdinalIgnoreCase));
-
-            if (duplicateEmail != null)
-            {
-                MessageBox.Show("Klient z tym adresem email już istnieje!", "Błąd walidacji",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                emailTextBox.Focus();
-                return false;
-            }
-
-            // Walidacja telefonu
-            if (string.IsNullOrWhiteSpace(phoneTextBox.Text))
-            {
-                MessageBox.Show("Proszę wprowadzić numer telefonu.", "Błąd walidacji",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                phoneTextBox.Focus();
-                return false;
-            }
-
-            // Walidacja wieku
-            var age = DateTime.Now.Year - dobDateTimePicker.Value.Year;
-            if (DateTime.Now.DayOfYear < dobDateTimePicker.Value.DayOfYear)
-                age--;
-
-            if (age < 18)
-            {
-                MessageBox.Show("Klient musi mieć ukończone 18 lat aby móc wypożyczyć pojazd.", "Błąd walidacji",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                dobDateTimePicker.Focus();
-                return false;
-            }
-
-            if (age > 75)
-            {
-                MessageBox.Show("Klient nie może mieć więcej niż 75 lat aby móc wypożyczyć pojazd.", "Błąd walidacji",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                dobDateTimePicker.Focus();
-                return false;
-            }
-
-            return true;
-        }
-
-        private void CancelButton_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
         }
     }
 }

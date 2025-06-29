@@ -24,11 +24,41 @@ namespace CarRentalSystem.Utils
         /// </summary>
         public static void InitializeDatabase()
         {
-            // Jeœli plik bazy danych nie istnieje, utwórz go
             if (!File.Exists(dbPath))
             {
                 SQLiteConnection.CreateFile(dbPath);
                 CreateTables();
+            }
+            else
+            {
+                EnsureAdditionalChargesColumn();
+            }
+        }
+        private static void EnsureAdditionalChargesColumn()
+        {
+            using (var conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                var cmd = new SQLiteCommand("PRAGMA table_info(Rentals);", conn);
+                bool hasColumn = false;
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["name"].ToString() == "AdditionalCharges")
+                        {
+                            hasColumn = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!hasColumn)
+                {
+                    var alterCmd = new SQLiteCommand(
+                        "ALTER TABLE Rentals ADD COLUMN AdditionalCharges REAL NOT NULL DEFAULT 0;", conn);
+                    alterCmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -67,18 +97,19 @@ namespace CarRentalSystem.Utils
 
                 // Tabela Rentals
                 string createRentalsTable = @"
-                CREATE TABLE IF NOT EXISTS Rentals (
-                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    VehicleId INTEGER NOT NULL,
-                    CustomerId INTEGER NOT NULL,
-                    StartDate TEXT NOT NULL,
-                    EndDate TEXT NOT NULL,
-                    ActualReturnDate TEXT,
-                    Status TEXT NOT NULL,
-                    TotalCost REAL NOT NULL,
-                    FOREIGN KEY (VehicleId) REFERENCES Vehicles (Id),
-                    FOREIGN KEY (CustomerId) REFERENCES Customers (Id)
-                );";
+        CREATE TABLE IF NOT EXISTS Rentals (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            VehicleId INTEGER NOT NULL,
+            CustomerId INTEGER NOT NULL,
+            StartDate TEXT NOT NULL,
+            EndDate TEXT NOT NULL,
+            ActualReturnDate TEXT,
+            Status TEXT NOT NULL,
+            TotalCost REAL NOT NULL,
+            AdditionalCharges REAL NOT NULL DEFAULT 0,
+            FOREIGN KEY (VehicleId) REFERENCES Vehicles (Id),
+            FOREIGN KEY (CustomerId) REFERENCES Customers (Id)
+        );";
 
                 // Wykonaj wszystkie polecenia CREATE TABLE
                 ExecuteCommand(conn, createVehiclesTable);

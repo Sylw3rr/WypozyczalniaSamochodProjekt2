@@ -64,3 +64,38 @@
 29.06.2025 14:40:17 [INFO] - Załadowano dane klientów
 29.06.2025 14:40:17 [INFO] - Załadowano dane wypożyczeń
 29.06.2025 14:40:17 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 20:05:28 [INFO] - Załadowano dane pojazdów
+29.06.2025 20:05:28 [INFO] - Załadowano dane klientów
+29.06.2025 20:05:28 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 20:05:28 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 20:12:56 [INFO] - Załadowano dane pojazdów
+29.06.2025 20:12:56 [INFO] - Załadowano dane klientów
+29.06.2025 20:12:56 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 20:12:56 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 20:13:02 [INFO] - Usunięto pojazd: Fdfsa ffeq (2023) - 432FSDF
+29.06.2025 20:13:02 [INFO] - Załadowano dane pojazdów
+29.06.2025 20:13:02 [INFO] - Usunięto pojazd: Fdfsa ffeq
+29.06.2025 20:13:03 [INFO] - Załadowano dane pojazdów
+29.06.2025 20:13:09 [INFO] - Załadowano dane pojazdów
+29.06.2025 20:13:09 [INFO] - Załadowano dane klientów
+29.06.2025 20:13:09 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 20:13:09 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 20:36:15 [INFO] - Załadowano dane pojazdów
+29.06.2025 20:36:15 [INFO] - Załadowano dane klientów
+29.06.2025 20:36:15 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 20:36:15 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 20:36:32 [INFO] - Zmieniono dostępność pojazdu 1 na False
+29.06.2025 20:36:32 [INFO] - Utworzono wypożyczenie 1 dla pojazdu 1 przez klienta 1
+29.06.2025 20:36:32 [INFO] - Zaktualizowano wypożyczenie 1
+29.06.2025 20:36:33 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 20:36:58 [INFO] - Usunięto pojazd: Fdfsa ffeq (2023) - 432FSDF
+29.06.2025 20:36:58 [INFO] - Załadowano dane pojazdów
+29.06.2025 20:36:58 [INFO] - Usunięto pojazd: Fdfsa ffeq
+29.06.2025 20:37:03 [INFO] - Załadowano dane pojazdów
+29.06.2025 20:37:03 [INFO] - Załadowano dane klientów
+29.06.2025 20:37:03 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 20:37:03 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 20:38:16 [INFO] - Załadowano dane pojazdów
+29.06.2025 20:38:16 [INFO] - Załadowano dane klientów
+29.06.2025 20:38:16 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 20:38:16 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie

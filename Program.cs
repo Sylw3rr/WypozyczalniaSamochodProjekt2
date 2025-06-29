@@ -15,7 +15,7 @@ namespace CarRentalSystem
         {
             ApplicationConfiguration.Initialize();
 
-            // ✅ WAŻNE: Inicjalizuj bazę danych PRZED utworzeniem serwisów
+            // Inicjalizacja bazy danych z migracją
             Database.InitializeDatabase();
 
             // Dependency Injection
@@ -24,10 +24,17 @@ namespace CarRentalSystem
             ICustomerService customerService = new CustomerService(logger);
             IRentalService rentalService = new RentalService(vehicleService, customerService, logger);
 
-            // Wczytaj dane z bazy danych
-            vehicleService.LoadVehiclesFromDb();
-            customerService.LoadCustomersFromDb();
-            rentalService.LoadRentalsFromDb();
+            // Wczytanie danych z obsługą błędów
+            try
+            {
+                vehicleService.LoadVehiclesFromDb();
+                customerService.LoadCustomersFromDb();
+                rentalService.LoadRentalsFromDb();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Błąd wczytywania danych", ex);
+            }
 
             Application.Run(new MainForm(vehicleService, customerService, rentalService, logger));
         }
