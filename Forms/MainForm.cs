@@ -251,14 +251,20 @@ namespace CarRentalSystem.Forms
             });
         }
 
+    
+
         private void CreateCustomersTab()
         {
             customersTab.BackColor = Color.FromArgb(250, 250, 250);
 
             addCustomerBtn = CreateStyledButton("➕ Dodaj Klienta", new Point(20, 20), Color.FromArgb(76, 175, 80));
-            refreshCustomersBtn = CreateStyledButton("🔄 Odśwież", new Point(160, 20), Color.FromArgb(156, 39, 176));
+            var editCustomerBtn = CreateStyledButton("✏️ Edytuj", new Point(160, 20), Color.FromArgb(33, 150, 243));
+            var deleteCustomerBtn = CreateStyledButton("🗑️ Usuń", new Point(280, 20), Color.FromArgb(244, 67, 54));
+            refreshCustomersBtn = CreateStyledButton("🔄 Odśwież", new Point(400, 20), Color.FromArgb(156, 39, 176));
 
             addCustomerBtn.Click += AddCustomerBtn_Click;
+            editCustomerBtn.Click += EditCustomerBtn_Click;
+            deleteCustomerBtn.Click += DeleteCustomerBtn_Click;
             refreshCustomersBtn.Click += (s, e) => LoadCustomerData();
 
             customersGrid = new DataGridView
@@ -273,38 +279,63 @@ namespace CarRentalSystem.Forms
             };
 
             customersTab.Controls.AddRange(new Control[] {
-                addCustomerBtn, refreshCustomersBtn, customersGrid
-            });
+        addCustomerBtn, editCustomerBtn, deleteCustomerBtn, refreshCustomersBtn, customersGrid
+    });
+        }
+        private void EditCustomerBtn_Click(object sender, EventArgs e)
+        {
+            if (customersGrid.SelectedRows.Count > 0)
+            {
+                try
+                {
+                    var selectedCustomer = (Customer)customersGrid.SelectedRows[0].DataBoundItem;
+                    var customerForm = new CustomerFormDialog(_customerService, _logger);
+                    if (customerForm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadCustomerData();
+                        RefreshDashboardStats();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Błąd edycji klienta", ex);
+                    MessageBox.Show("Błąd edycji klienta", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Wybierz klienta do edycji", "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
-        private void CreateRentalsTab()
+        private void DeleteCustomerBtn_Click(object sender, EventArgs e)
         {
-            rentalsTab.BackColor = Color.FromArgb(250, 250, 250);
-
-            createRentalBtn = CreateStyledButton("➕ Nowe Wypożyczenie", new Point(20, 20), Color.FromArgb(76, 175, 80));
-            endRentalBtn = CreateStyledButton("✅ Zakończ", new Point(180, 20), Color.FromArgb(255, 152, 0));
-            refreshRentalsBtn = CreateStyledButton("🔄 Odśwież", new Point(320, 20), Color.FromArgb(156, 39, 176));
-
-            createRentalBtn.Click += CreateRentalBtn_Click;
-            endRentalBtn.Click += EndRentalBtn_Click;
-            refreshRentalsBtn.Click += (s, e) => LoadRentalData();
-
-            // Użyj dgvRentals zamiast rentalsGrid dla spójności
-            dgvRentals = new DataGridView
+            if (customersGrid.SelectedRows.Count > 0)
             {
-                Location = new Point(20, 70),
-                Size = new Size(1120, 540),
-                AutoGenerateColumns = false,
-                AllowUserToAddRows = false,
-                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                ReadOnly = true,
-                BackgroundColor = Color.White,
-                MultiSelect = false
-            };
+                try
+                {
+                    var selectedCustomer = (Customer)customersGrid.SelectedRows[0].DataBoundItem;
+                    var result = MessageBox.Show($"Czy na pewno chcesz usunąć klienta {selectedCustomer.FullName}?",
+                        "Potwierdzenie", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            rentalsTab.Controls.AddRange(new Control[] {
-                createRentalBtn, endRentalBtn, refreshRentalsBtn, dgvRentals
-            });
+                    if (result == DialogResult.Yes)
+                    {
+                        _customerService.DeleteCustomer(selectedCustomer.Id);
+                        LoadCustomerData();
+                        RefreshDashboardStats();
+                        _logger.LogInfo($"Usunięto klienta: {selectedCustomer.FullName}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Błąd usuwania klienta", ex);
+                    MessageBox.Show("Błąd usuwania klienta", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Wybierz klienta do usunięcia", "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void SetupRentalsDataGridView()
@@ -457,7 +488,7 @@ namespace CarRentalSystem.Forms
         }
 
         // Event Handlers
-        private void SearchVehiclesBox_TextChanged(object? sender, EventArgs e)
+        private void SearchVehiclesBox_TextChanged(object sender, EventArgs e)
         {
             if (searchVehiclesBox == null) return;
 
@@ -470,7 +501,7 @@ namespace CarRentalSystem.Forms
             vehiclesGrid.DataSource = filteredVehicles;
         }
 
-        private void AddVehicleBtn_Click(object? sender, EventArgs e)
+        private void AddVehicleBtn_Click(object sender, EventArgs e)
         {
             try
             {
@@ -488,7 +519,7 @@ namespace CarRentalSystem.Forms
             }
         }
 
-        private void EditVehicleBtn_Click(object? sender, EventArgs e)
+        private void EditVehicleBtn_Click(object sender, EventArgs e)
         {
             if (vehiclesGrid.SelectedRows.Count > 0)
             {
@@ -514,7 +545,7 @@ namespace CarRentalSystem.Forms
             }
         }
 
-        private void DeleteVehicleBtn_Click(object? sender, EventArgs e)
+        private void DeleteVehicleBtn_Click(object sender, EventArgs e)
         {
             if (vehiclesGrid.SelectedRows.Count > 0)
             {
@@ -544,7 +575,7 @@ namespace CarRentalSystem.Forms
             }
         }
 
-        private void AddCustomerBtn_Click(object? sender, EventArgs e)
+        private void AddCustomerBtn_Click(object sender, EventArgs e)
         {
             try
             {
@@ -561,8 +592,49 @@ namespace CarRentalSystem.Forms
                 MessageBox.Show("Błąd dodawania klienta", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void CreateRentalsTab()
+        {
+            // Tworzenie zakładki wypożyczeń
+            rentalsTab = new TabPage("🚗 Wypożyczenia");
+            rentalsTab.UseVisualStyleBackColor = true;
+            rentalsTab.BackColor = Color.FromArgb(250, 250, 250);
 
-        private void CreateRentalBtn_Click(object? sender, EventArgs e)
+            // Dodanie przycisków
+            createRentalBtn = CreateStyledButton("➕ Nowe Wypożyczenie",
+                new Point(20, 20), Color.FromArgb(76, 175, 80));
+            endRentalBtn = CreateStyledButton("✅ Zakończ",
+                new Point(180, 20), Color.FromArgb(255, 152, 0));
+            refreshRentalsBtn = CreateStyledButton("🔄 Odśwież",
+                new Point(320, 20), Color.FromArgb(156, 39, 176));
+
+            // Obsługa zdarzeń
+            createRentalBtn.Click += CreateRentalBtn_Click;
+            endRentalBtn.Click += EndRentalBtn_Click;
+            refreshRentalsBtn.Click += (s, e) => LoadRentalData();
+
+            // DataGridView dla wypożyczeń
+            dgvRentals = new DataGridView
+            {
+                Location = new Point(20, 70),
+                Size = new Size(1120, 540),
+                AutoGenerateColumns = false,
+                AllowUserToAddRows = false,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                ReadOnly = true,
+                BackgroundColor = Color.White,
+                MultiSelect = false
+            };
+
+            // Dodanie kontrolek do zakładki
+            rentalsTab.Controls.AddRange(new Control[] {
+        createRentalBtn, endRentalBtn, refreshRentalsBtn, dgvRentals
+    });
+
+            // Dodanie zakładki do TabControl
+            mainTabControl.TabPages.Add(rentalsTab);
+        }
+
+        private void CreateRentalBtn_Click(object sender, EventArgs e)
         {
             try
             {
@@ -586,7 +658,7 @@ namespace CarRentalSystem.Forms
             }
         }
 
-        private void EndRentalBtn_Click(object? sender, EventArgs e)
+        private void EndRentalBtn_Click(object sender, EventArgs e)
         {
             if (dgvRentals?.SelectedRows.Count > 0)
             {

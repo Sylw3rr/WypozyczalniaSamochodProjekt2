@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
@@ -15,6 +15,8 @@ namespace CarRentalSystem.Interfaces
         IEnumerable<Customer> GetAllCustomers();
         Customer GetCustomerById(int id);
         void AddCustomer(Customer customer);
+        void UpdateCustomer(Customer customer);     
+        void DeleteCustomer(int id);                
         void LoadCustomersFromDb();
     }
 }

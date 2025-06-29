@@ -99,3 +99,49 @@
 29.06.2025 20:38:16 [INFO] - Załadowano dane klientów
 29.06.2025 20:38:16 [INFO] - Załadowano dane wypożyczeń
 29.06.2025 20:38:16 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 21:45:09 [INFO] - Załadowano dane pojazdów
+29.06.2025 21:45:09 [INFO] - Załadowano dane klientów
+29.06.2025 21:45:09 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 21:45:09 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:00:09 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:00:09 [INFO] - Załadowano dane klientów
+29.06.2025 22:00:09 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:00:09 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:00:18 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:00:18 [INFO] - Załadowano dane klientów
+29.06.2025 22:00:18 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:00:18 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:01:25 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:01:25 [INFO] - Załadowano dane klientów
+29.06.2025 22:01:25 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:01:50 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:01:50 [INFO] - Załadowano dane klientów
+29.06.2025 22:01:50 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:01:50 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:02:14 [INFO] - Dodano klienta: Fdqedq fdfsdsad
+29.06.2025 22:02:14 [INFO] - ✅ Pomyślnie dodano klienta: Fdqedq fdfsdsad
+29.06.2025 22:02:15 [INFO] - Załadowano dane klientów
+29.06.2025 22:02:22 [INFO] - Usunięto pojazd: Fdfsa ffeq (2023) - 432FSDF
+29.06.2025 22:02:22 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:02:22 [INFO] - Usunięto pojazd: Fdfsa ffeq
+29.06.2025 22:02:26 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:02:26 [INFO] - Załadowano dane klientów
+29.06.2025 22:02:26 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:02:26 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:02:31 [INFO] - Usunięto klienta: Fdqedq fdfsdsad
+29.06.2025 22:02:31 [INFO] - Załadowano dane klientów
+29.06.2025 22:02:31 [INFO] - Usunięto klienta: Fdqedq fdfsdsad
+29.06.2025 22:02:37 [INFO] - Zmieniono dostępność pojazdu 1 na True
+29.06.2025 22:02:37 [INFO] - Zakończono wypożyczenie 1. Całkowity koszt: 3 150,00 zł
+29.06.2025 22:02:37 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:02:37 [INFO] - Załadowano dane klientów
+29.06.2025 22:02:37 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:02:37 [INFO] - Zakończono wypożyczenie 1
+29.06.2025 22:02:44 [INFO] - Zmieniono dostępność pojazdu 1 na False
+29.06.2025 22:02:44 [INFO] - Utworzono wypożyczenie 2 dla pojazdu 1 przez klienta 1
+29.06.2025 22:02:46 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:02:52 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:02:56 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:02:56 [INFO] - Załadowano dane klientów
+29.06.2025 22:02:56 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:02:56 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie

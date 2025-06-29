@@ -74,5 +74,41 @@ namespace CarRentalSystem.Services
                 _nextId = _customers.Max(c => c.Id) + 1;
             }
         }
+        public void UpdateCustomer(Customer customer)
+        {
+            var existingCustomer = _customers.FirstOrDefault(c => c.Id == customer.Id);
+            if (existingCustomer != null)
+            {
+                existingCustomer.FirstName = customer.FirstName;
+                existingCustomer.LastName = customer.LastName;
+                existingCustomer.Email = customer.Email;
+                existingCustomer.PhoneNumber = customer.PhoneNumber;
+                existingCustomer.DateOfBirth = customer.DateOfBirth;
+
+                SaveCustomerToDb(existingCustomer);
+                _logger.LogInfo($"Zaktualizowano klienta: {existingCustomer.FullName}");
+            }
+        }
+
+        public void DeleteCustomer(int id)
+        {
+            var customer = _customers.FirstOrDefault(c => c.Id == id);
+            if (customer != null)
+            {
+                _customers.Remove(customer);
+                DeleteCustomerFromDb(id);
+                _logger.LogInfo($"Usunięto klienta: {customer.FullName}");
+            }
+        }
+
+        public void DeleteCustomerFromDb(int id)
+        {
+            using (var conn = Database.GetConnection())
+            {
+                var cmd = new SQLiteCommand("DELETE FROM Customers WHERE Id = @Id", conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

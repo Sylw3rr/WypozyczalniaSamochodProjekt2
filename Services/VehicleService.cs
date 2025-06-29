@@ -31,12 +31,23 @@ namespace CarRentalSystem.Services
             _logger.LogInfo($"Dodano pojazd: {vehicle}");
         }
 
+        public void DeleteVehicleFromDb(int id)
+        {
+            using (var conn = Database.GetConnection())
+            {
+                var cmd = new SQLiteCommand("DELETE FROM Vehicles WHERE Id = @Id", conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         public void DeleteVehicle(int id)
         {
             var vehicle = GetVehicleById(id);
             if (vehicle != null)
             {
                 _vehicles.Remove(vehicle);
+                DeleteVehicleFromDb(id); // ← DODAJ TĘ LINIĘ
                 _logger.LogInfo($"Usunięto pojazd: {vehicle}");
             }
         }
@@ -50,6 +61,7 @@ namespace CarRentalSystem.Services
             if (vehicle != null)
             {
                 vehicle.IsAvailable = isAvailable;
+                SaveVehicleToDb(vehicle);
                 _logger.LogInfo($"Zmieniono dostępność pojazdu {vehicle.Id} na {isAvailable}");
             }
         }
