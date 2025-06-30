@@ -30,6 +30,7 @@ Utils/ – funkcje pomocnicze (logowanie, walidacja)
 Forms/ – ewentualne komponenty UI (rozszerzenie)
 Program.cs – punkt startowy aplikacji
 ---
+![Projekt bez nazwy](https://github.com/user-attachments/assets/bb9284d5-cf1f-412e-ae65-743b15529780)
 
 ## 🛠 Instalacja i uruchamianie
 
