@@ -31,6 +31,7 @@ Forms/ – ewentualne komponenty UI (rozszerzenie)
 Program.cs – punkt startowy aplikacji
 ---
 ![Projekt bez nazwy](https://github.com/user-attachments/assets/bb9284d5-cf1f-412e-ae65-743b15529780)
+![zvasrpsqxxecyl2bxfz3](https://github.com/user-attachments/assets/47f4cbdb-0c74-4f66-8801-1cbf4fa01812)
 
 ## 🛠 Instalacja i uruchamianie
 
@@ -61,6 +62,22 @@ Po uruchomieniu zobaczysz konsolowe menu z opcjami:
 - **Wyjdź – zakończenie programu**
 
 ---
+## 🚀 Szybka roadmapa rozwoju
+- Migracja do .NET 8 & EF Core
+Modernizacja środowiska uruchomieniowego i wprowadzenie trwałej bazy danych zamiast kolekcji w pamięci.
+
+- Konteneryzacja Docker + CI/CD (GitHub Actions)
+Automatyczne budowanie i testowanie aplikacji przy każdym commicie oraz łatwe wdrażanie w chmurze.
+
+- Nowoczesny interfejs (WPF / MAUI albo Blazor Web)
+Lepszy UX, responsywność i możliwość uruchomienia aplikacji na wielu platformach.
+
+-System powiadomień i płatności online
+- E-maile lub SMS-y o rezerwacjach i zwrotach oraz integracja z bramką płatniczą dla pełnego procesu wynajmu.
+
+- Zaawansowana analityka i raporty
+- Dashboard KPI (obłożenie floty, przychody, popularność modeli) z opcją eksportu do CSV/PDF.
+
 # 📊 Cztery Główne Paradygmaty Obiektowe w Projekcie
 
 > **Analiza implementacji zasad programowania obiektowego w systemie wypożyczalni samochodów**
