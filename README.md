@@ -52,9 +52,70 @@ Aplikacja zbuduje projekt, stworzy (jeśli nie istnieją) bazę danych i plik lo
 ## 🧩 Użycie
 Po uruchomieniu zobaczysz konsolowe menu z opcjami:
 
-Dodaj samochód – wpisz dane pojazdu
-Dodaj klienta – zarejestruj nowego użytkownika
-Wypożycz – wybierz klienta i samochód
-Zwróć – oddaj pojazd, aktualizując jego stan
-Pokaż dostępność – lista dostępnych lub wypożyczonych pojazdów
-Wyjdź – zakończenie programu
+- **Dodaj samochód – wpisz dane pojazdu**
+- **Dodaj klienta – zarejestruj nowego użytkownika**
+- **Wypożycz – wybierz klienta i samochód**
+- **Zwróć – oddaj pojazd, aktualizując jego stan**
+- **Pokaż dostępność – lista dostępnych lub wypożyczonych pojazdów**
+- **Wyjdź – zakończenie programu**
+
+---
+## Paradygmaty obiektowe:
+Cztery główne paradygmaty obiektowe w projekcie
+1. Enkapsulacja (Hermetyzacja)
+Ukrywanie danych i logiki wewnętrznej za prywatnymi polami, co chroni stan obiektów
+przed niepożądanym dostępem.
+Przykład – Services/VehicleService.cs (linie 8-10):
+private readonly ILogger _logger;
+private readonly List<Vehicle> _vehicles;
+private int _nextId = 1;
+Chroni listę pojazdów i logger przed zewnętrznym dostępem.
+Przykład – Forms/VehicleForm.cs (linie 18-30):
+Wszystkie kontrolki UI są prywatne, co chroni stan formularza i ułatwia utrzymanie.
+2. Dziedziczenie (Inheritance)
+Pozwala klasom współdzielić i rozszerzać wspólne właściwości bazowe poza UI,
+ułatwiając ponowne wykorzystanie kodu i jego organizację.
+Przykład: Services/VehicleService.cs
+public class VehicleService : IVehicleService
+{
+ // Implementacja metod z IVehicleService
+}
+VehicleService implementuje interfejs IVehicleService, co wymusza
+zaimplementowanie wszystkich metod zadeklarowanych w interfejsie. Dziedziczenie po
+interfejsie pozwala stworzyć kontrakt, który klasa musi spełnić, zapewniając spójność i
+elastyczność projektu.
+3. Polimorfizm (Polymorphism)
+Pozwala traktować różne implementacje w ten sam sposób dzięki interfejsom, co
+znacznąco zwiększa elastyczność i testowalność kodu.
+Przykład – Program.cs (linie 16-19):
+ILogger logger = Logger.Instance;
+IVehicleService vehicleService = new VehicleService(logger);
+ICustomerService customerService = new CustomerService(logger);
+IRentalService rentalService = new RentalService(vehicleService,
+customerService, logger);
+Użycie interfejsów umożliwia łatwą wymienność implementacji oraz testowanie.
+Przykład – Services/RentalService.cs (linie 13-17):
+public RentalService(IVehicleService vehicleService, ICustomerService
+customerService, ILogger logger)
+{
+ _vehicleService = vehicleService;
+ _customerService = customerService;
+ _logger = logger;
+}
+Dependency Injection + Polimorfizm: wstrzykiwanie interfejsów w konstruktorze pozwala
+na swobodną podmianę implementacji i tworzenie bardziej modularnego kodu.
+4. Abstrakcja (Abstraction)
+Ukrywa szczegóły implementacji i prezentuje jedynie niezbędny kontrakt, pozwalając
+korzystać z funkcjonalności bez znajomości wewnętrznego działania.
+Przykład – Interfaces/IVehicleService.cs (linie 6-13):
+public interface IVehicleService
+{
+ IEnumerable<Vehicle> GetAllVehicles();
+ IEnumerable<Vehicle> GetAvailableVehicles();
+ Vehicle GetVehicleById(int id);
+ void AddVehicle(Vehicle vehicle);
+ void UpdateVehicle(Vehicle vehicle);
+ void DeleteVehicle(int id);
+ void SetVehicleAvailability(int id, bool isAvailable);
+}
+Definiuje kontrakt na operacje pojazdów bez ujawniania implementacji.
