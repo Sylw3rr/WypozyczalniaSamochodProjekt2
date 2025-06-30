@@ -289,7 +289,9 @@ namespace CarRentalSystem.Forms
                 try
                 {
                     var selectedCustomer = (Customer)customersGrid.SelectedRows[0].DataBoundItem;
-                    var customerForm = new CustomerFormDialog(_customerService, _logger);
+                    // ✅ POPRAWKA: Przekaż selectedCustomer do konstruktora
+                    var customerForm = new CustomerFormDialog(_customerService, _logger, selectedCustomer);
+
                     if (customerForm.ShowDialog() == DialogResult.OK)
                     {
                         LoadCustomerData();

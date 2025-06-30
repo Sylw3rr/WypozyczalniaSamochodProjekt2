@@ -39,8 +39,19 @@ namespace CarRentalSystem.Forms
             CreateControls();
             SetupLayout();
             AttachEvents();
+            LoadCustomerData();
         }
-
+        private void LoadCustomerData()
+        {
+            if (_isEditMode && _editingCustomer != null)
+            {
+                txtFirstName.Text = _editingCustomer.FirstName;
+                txtLastName.Text = _editingCustomer.LastName;
+                txtEmail.Text = _editingCustomer.Email;
+                txtPhone.Text = _editingCustomer.PhoneNumber;
+                dtpBirthDate.Value = _editingCustomer.DateOfBirth;
+            }
+        }
         private void SetupFormProperties()
         {
             Text = "🏢 Nowy Klient - System Wypożyczalni";
@@ -56,7 +67,7 @@ namespace CarRentalSystem.Forms
        : this(customerService, logger)
         {
             _editingCustomer = editingCustomer;
-            _isEditMode = false;
+            _isEditMode = true;
             Text = "✏️ Edytuj Klienta";
         }
         private void CreateControls()
@@ -73,9 +84,9 @@ namespace CarRentalSystem.Forms
 
             var lblLastName = new Label
             {
-                Text = "👤 Nazwisko:",
+                Text = "👤 Nazwiwsko:",
                 Location = new Point(25, 65),
-                Size = new Size(90, 25),
+                AutoSize = true,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
                 ForeColor = Color.DarkBlue
             };
@@ -115,10 +126,9 @@ namespace CarRentalSystem.Forms
                 Font = new Font("Segoe UI", 10),
                 BorderStyle = BorderStyle.FixedSingle
             };
-
             txtLastName = new TextBox
             {
-                Location = new Point(125, 65),
+                Location = new Point(125, 25),
                 Size = new Size(260, 25),
                 Font = new Font("Segoe UI", 10),
                 BorderStyle = BorderStyle.FixedSingle
@@ -217,12 +227,28 @@ namespace CarRentalSystem.Forms
                 if (!PerformValidation())
                     return;
 
-                var customer = CreateCustomerFromForm();
-                customerService.AddCustomer(customer);
+                if (_isEditMode && _editingCustomer != null)
+                {
+                    // Edycja istniejącego klienta
+                    _editingCustomer.FirstName = txtFirstName.Text.Trim();
+                    _editingCustomer.LastName = txtLastName.Text.Trim();
+                    _editingCustomer.Email = txtEmail.Text.Trim();
+                    _editingCustomer.PhoneNumber = txtPhone.Text.Trim();
+                    _editingCustomer.DateOfBirth = dtpBirthDate.Value;
 
-                logger.LogInfo($"✅ Pomyślnie dodano klienta: {customer.FullName}");
+                    customerService.UpdateCustomer(_editingCustomer);
+                    logger.LogInfo($"✅ Zaktualizowano klienta: {_editingCustomer.FullName}");
+                    ShowSuccessMessage($"Dane klienta {_editingCustomer.FullName} zostały zaktualizowane!");
+                }
+                else
+                {
+                    // Dodawanie nowego klienta
+                    var customer = CreateCustomerFromForm();
+                    customerService.AddCustomer(customer);
+                    logger.LogInfo($"✅ Dodano klienta: {customer.FullName}");
+                    ShowSuccessMessage($"Klient {customer.FullName} został dodany do systemu!");
+                }
 
-                ShowSuccessMessage($"Klient {customer.FullName} został dodany do systemu!");
                 DialogResult = DialogResult.OK;
                 Close();
             }

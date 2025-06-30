@@ -195,3 +195,49 @@
 29.06.2025 22:47:40 [INFO] - Załadowano dane klientów
 29.06.2025 22:47:40 [INFO] - Załadowano dane wypożyczeń
 29.06.2025 22:47:40 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 22:57:58 [INFO] - Załadowano dane pojazdów
+29.06.2025 22:57:58 [INFO] - Załadowano dane klientów
+29.06.2025 22:57:58 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 22:57:58 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 23:01:50 [INFO] - Załadowano dane pojazdów
+29.06.2025 23:01:50 [INFO] - Załadowano dane klientów
+29.06.2025 23:01:50 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 23:01:50 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 23:02:45 [INFO] - Zaktualizowano klienta: Jan Kowalski
+29.06.2025 23:02:45 [INFO] - ✅ Zaktualizowano klienta: Jan Kowalski
+29.06.2025 23:02:46 [INFO] - Załadowano dane klientów
+29.06.2025 23:13:29 [INFO] - Załadowano dane pojazdów
+29.06.2025 23:13:29 [INFO] - Załadowano dane klientów
+29.06.2025 23:13:29 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 23:13:29 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 23:13:33 [ERROR] - Błąd dodawania klienta | Exception: Object reference not set to an instance of an object.
+StackTrace:    at CarRentalSystem.Forms.CustomerFormDialog.AttachEvents() in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\CustomerForm.cs:line 218
+   at CarRentalSystem.Forms.CustomerFormDialog.BuildForm() in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\CustomerForm.cs:line 41
+   at CarRentalSystem.Forms.CustomerFormDialog..ctor(ICustomerService service, ILogger log) in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\CustomerForm.cs:line 32
+   at CarRentalSystem.Forms.MainForm.AddCustomerBtn_Click(Object sender, EventArgs e) in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\MainForm.cs:line 584
+29.06.2025 23:13:34 [ERROR] - Błąd dodawania klienta | Exception: Object reference not set to an instance of an object.
+StackTrace:    at CarRentalSystem.Forms.CustomerFormDialog.AttachEvents() in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\CustomerForm.cs:line 218
+   at CarRentalSystem.Forms.CustomerFormDialog.BuildForm() in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\CustomerForm.cs:line 41
+   at CarRentalSystem.Forms.CustomerFormDialog..ctor(ICustomerService service, ILogger log) in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\CustomerForm.cs:line 32
+   at CarRentalSystem.Forms.MainForm.AddCustomerBtn_Click(Object sender, EventArgs e) in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\MainForm.cs:line 584
+29.06.2025 23:13:36 [ERROR] - Błąd dodawania klienta | Exception: Object reference not set to an instance of an object.
+StackTrace:    at CarRentalSystem.Forms.CustomerFormDialog.AttachEvents() in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\CustomerForm.cs:line 218
+   at CarRentalSystem.Forms.CustomerFormDialog.BuildForm() in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\CustomerForm.cs:line 41
+   at CarRentalSystem.Forms.CustomerFormDialog..ctor(ICustomerService service, ILogger log) in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\CustomerForm.cs:line 32
+   at CarRentalSystem.Forms.MainForm.AddCustomerBtn_Click(Object sender, EventArgs e) in C:\Users\User\Desktop\CarRentalSystem_FINAL\CarRentalSystem\Forms\MainForm.cs:line 584
+29.06.2025 23:14:20 [INFO] - Załadowano dane pojazdów
+29.06.2025 23:14:20 [INFO] - Załadowano dane klientów
+29.06.2025 23:14:20 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 23:14:20 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 23:15:00 [INFO] - Załadowano dane pojazdów
+29.06.2025 23:15:00 [INFO] - Załadowano dane klientów
+29.06.2025 23:15:00 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 23:15:00 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+29.06.2025 23:20:11 [INFO] - Załadowano dane pojazdów
+29.06.2025 23:20:11 [INFO] - Załadowano dane klientów
+29.06.2025 23:20:11 [INFO] - Załadowano dane wypożyczeń
+29.06.2025 23:20:11 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 15:53:46 [INFO] - Załadowano dane pojazdów
+30.06.2025 15:53:46 [INFO] - Załadowano dane klientów
+30.06.2025 15:53:46 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 15:53:46 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
