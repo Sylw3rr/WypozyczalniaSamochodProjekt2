@@ -4,9 +4,11 @@ using CarRentalSystem.Utils;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace CarRentalSystem.Forms
 {
+    [DesignerCategory("")]
     public class CustomerFormDialog : Form
     {
         // === POLA SERWISÓW ===
@@ -25,11 +27,13 @@ namespace CarRentalSystem.Forms
         private Button btnCancel;
 
         // === KONSTRUKTOR ===
-        public CustomerFormDialog(ICustomerService service, ILogger log)
+        public CustomerFormDialog(ICustomerService customerService, ILogger logger)
         {
-            customerService = service;
-            logger = log;
-            BuildForm();
+            this.customerService = customerService;
+            this.logger = logger;
+            _isEditMode = false;
+
+            BuildForm(); // ← TYLKO TO, BEZ InitializeComponent()
         }
 
         // === BUDOWANIE FORMULARZA ===
@@ -39,7 +43,7 @@ namespace CarRentalSystem.Forms
             CreateControls();
             SetupLayout();
             AttachEvents();
-            LoadCustomerData();
+            LoadCustomerDataForEdit();
         }
         private void LoadCustomerData()
         {
@@ -54,8 +58,8 @@ namespace CarRentalSystem.Forms
         }
         private void SetupFormProperties()
         {
-            Text = "🏢 Nowy Klient - System Wypożyczalni";
-            Size = new Size(420, 320);
+            Text = _isEditMode ? "✏️ Edytuj Klienta" : "🏢 Nowy Klient - System Wypożyczalni";
+            Size = new Size(450, 350); // ✅ ZWIĘKSZONY ROZMIAR
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -64,137 +68,155 @@ namespace CarRentalSystem.Forms
             Font = new Font("Segoe UI", 9);
         }
         public CustomerFormDialog(ICustomerService customerService, ILogger logger, Customer editingCustomer)
-       : this(customerService, logger)
         {
+            this.customerService = customerService;
+            this.logger = logger;
             _editingCustomer = editingCustomer;
             _isEditMode = true;
-            Text = "✏️ Edytuj Klienta";
+
+            BuildForm(); // ← TYLKO TO, BEZ InitializeComponent()
+            LoadCustomerDataForEdit(); // Wypełnij danymi
         }
         private void CreateControls()
         {
-            // Etykiety
+            // === SPÓJNE POZYCJONOWANIE ===
+            int labelWidth = 100;
+            int fieldWidth = 250;
+            int leftMargin = 25;
+            int labelW = 110, fieldW = 230;
+            int left = 25, fieldLeft = left + labelW + 10;
+            int rowHeight = 40;
+            int startY = 25;
+            
+            
+            // === ETYKIETY ===
             var lblFirstName = new Label
             {
                 Text = "👤 Imię:",
-                Location = new Point(25, 25),
-                Size = new Size(90, 25),
+                Location = new Point(leftMargin, startY),
+                Size = new Size(labelWidth, 25),
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                ForeColor = Color.DarkBlue
+                ForeColor = Color.DarkBlue,
+                TextAlign = ContentAlignment.MiddleLeft
             };
 
             var lblLastName = new Label
             {
-                Text = "👤 Nazwiwsko:",
-                Location = new Point(25, 65),
-                AutoSize = true,
+                Text = "👤 Nazwisko:",
+                Location = new Point(left, 65),
+                Size = new Size(labelW, 25),
+                AutoSize = false,              // nie pozwól, by AutoSize zmieniło szerokość
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                ForeColor = Color.DarkBlue
+                ForeColor = Color.DarkBlue,
+                BackColor = Color.Transparent
             };
 
             var lblEmail = new Label
             {
-                Text = "📧 Email:",
-                Location = new Point(25, 105),
-                Size = new Size(90, 25),
+                Text = "✉️ Email:",
+                Location = new Point(leftMargin, startY + rowHeight * 2),
+                Size = new Size(labelWidth, 25),
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                ForeColor = Color.DarkBlue
+                ForeColor = Color.DarkBlue,
+                TextAlign = ContentAlignment.MiddleLeft
             };
 
             var lblPhone = new Label
             {
                 Text = "📞 Telefon:",
-                Location = new Point(25, 145),
-                Size = new Size(90, 25),
+                Location = new Point(leftMargin, startY + rowHeight * 3),
+                Size = new Size(labelWidth, 25),
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                ForeColor = Color.DarkBlue
+                ForeColor = Color.DarkBlue,
+                TextAlign = ContentAlignment.MiddleLeft
             };
 
             var lblBirthDate = new Label
             {
                 Text = "🎂 Data ur.:",
-                Location = new Point(25, 185),
-                Size = new Size(90, 25),
+                Location = new Point(leftMargin, startY + rowHeight * 4),
+                Size = new Size(labelWidth, 25),
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                ForeColor = Color.DarkBlue
+                ForeColor = Color.DarkBlue,
+                TextAlign = ContentAlignment.MiddleLeft
             };
 
-            // Pola tekstowe
+            // === POLA TEKSTOWE - SPÓJNE POZYCJE ===
             txtFirstName = new TextBox
             {
-                Location = new Point(125, 25),
-                Size = new Size(260, 25),
+                Location = new Point(fieldLeft, startY),
+                Size = new Size(fieldWidth, 25),
                 Font = new Font("Segoe UI", 10),
                 BorderStyle = BorderStyle.FixedSingle
             };
+
             txtLastName = new TextBox
             {
-                Location = new Point(125, 25),
-                Size = new Size(260, 25),
+                Location = new Point(fieldLeft, 65),
+                Size = new Size(fieldW, 25),
                 Font = new Font("Segoe UI", 10),
                 BorderStyle = BorderStyle.FixedSingle
             };
 
             txtEmail = new TextBox
             {
-                Location = new Point(125, 105),
-                Size = new Size(260, 25),
+                Location = new Point(fieldLeft, startY + rowHeight * 2),
+                Size = new Size(fieldWidth, 25),
                 Font = new Font("Segoe UI", 10),
                 BorderStyle = BorderStyle.FixedSingle
             };
 
             txtPhone = new TextBox
             {
-                Location = new Point(125, 145),
-                Size = new Size(260, 25),
+                Location = new Point(fieldLeft, startY + rowHeight * 3),
+                Size = new Size(fieldWidth, 25),
                 Font = new Font("Segoe UI", 10),
                 BorderStyle = BorderStyle.FixedSingle
             };
 
-            // DateTimePicker
+            // === DATA PICKER ===
             dtpBirthDate = new DateTimePicker
             {
-                Location = new Point(125, 185),
-                Size = new Size(200, 25),
+                Location = new Point(fieldLeft, startY + rowHeight * 4),
+                Size = new Size(fieldWidth, 25),
                 Font = new Font("Segoe UI", 10),
-                MaxDate = DateTime.Today.AddYears(-18),
-                Value = DateTime.Today.AddYears(-30),
                 Format = DateTimePickerFormat.Short
             };
 
-            // Przyciski
+            // === PRZYCISKI ===
             btnSave = new Button
             {
-                Text = "💾 Zapisz Klienta",
-                Location = new Point(125, 230),
-                Size = new Size(120, 40),
-                BackColor = Color.FromArgb(34, 139, 34),
+                Text = _isEditMode ? "Aktualizuj" : "Zapisz",
+                Location = new Point(fieldLeft, startY + rowHeight * 5 + 20),
+                Size = new Size(120, 35),
+                BackColor = Color.FromArgb(76, 175, 80),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                Cursor = Cursors.Hand
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
             };
 
             btnCancel = new Button
             {
-                Text = "❌ Anuluj",
-                Location = new Point(265, 230),
-                Size = new Size(120, 40),
-                BackColor = Color.FromArgb(220, 20, 60),
+                Text = "Anuluj",
+                Location = new Point(fieldLeft + 130, startY + rowHeight * 5 + 20),
+                Size = new Size(120, 35),
+                BackColor = Color.FromArgb(244, 67, 54),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                Cursor = Cursors.Hand
+                DialogResult = DialogResult.Cancel
             };
 
-            // Dodanie kontrolek do formularza
-            Controls.AddRange(new Control[]
+            // === DODAJ WSZYSTKO DO FORMULARZA ===
+            this.Controls.Clear();
+            this.Controls.AddRange(new Control[]
             {
-                lblFirstName, txtFirstName,
-                lblLastName, txtLastName,
-                lblEmail, txtEmail,
-                lblPhone, txtPhone,
-                lblBirthDate, dtpBirthDate,
-                btnSave, btnCancel
+        // Etykiety
+        lblFirstName, lblLastName, lblEmail, lblPhone, lblBirthDate,
+        // Pola
+        txtFirstName, txtLastName, txtEmail, txtPhone, dtpBirthDate,
+        // Przyciski
+        btnSave, btnCancel
             });
         }
 
@@ -207,7 +229,20 @@ namespace CarRentalSystem.Forms
             btnCancel.MouseEnter += (s, e) => btnCancel.BackColor = Color.FromArgb(139, 0, 0);
             btnCancel.MouseLeave += (s, e) => btnCancel.BackColor = Color.FromArgb(220, 20, 60);
         }
+        private void LoadCustomerDataForEdit()
+        {
+            if (_isEditMode && _editingCustomer != null)
+            {
+                txtFirstName.Text = _editingCustomer.FirstName;
+                txtLastName.Text = _editingCustomer.LastName;
+                txtEmail.Text = _editingCustomer.Email;
+                txtPhone.Text = _editingCustomer.PhoneNumber;
+                dtpBirthDate.Value = _editingCustomer.DateOfBirth;
 
+                Text = "✏️ Edytuj Klienta";
+                btnSave.Text = "Aktualizuj";
+            }
+        }
         private void AttachEvents()
         {
             btnSave.Click += OnSaveClick;
@@ -215,8 +250,6 @@ namespace CarRentalSystem.Forms
 
             // Walidacja w czasie rzeczywistym
             txtEmail.Leave += (s, e) => ValidateEmailField();
-            txtFirstName.TextChanged += (s, e) => ValidateNameField(txtFirstName);
-            txtLastName.TextChanged += (s, e) => ValidateNameField(txtLastName);
         }
 
         // === OBSŁUGA ZDARZEŃ ===
@@ -229,7 +262,7 @@ namespace CarRentalSystem.Forms
 
                 if (_isEditMode && _editingCustomer != null)
                 {
-                    // Edycja istniejącego klienta
+                    // === TRYB EDYCJI ===
                     _editingCustomer.FirstName = txtFirstName.Text.Trim();
                     _editingCustomer.LastName = txtLastName.Text.Trim();
                     _editingCustomer.Email = txtEmail.Text.Trim();
@@ -238,15 +271,15 @@ namespace CarRentalSystem.Forms
 
                     customerService.UpdateCustomer(_editingCustomer);
                     logger.LogInfo($"✅ Zaktualizowano klienta: {_editingCustomer.FullName}");
-                    ShowSuccessMessage($"Dane klienta {_editingCustomer.FullName} zostały zaktualizowane!");
+                    ShowSuccessMessage($"Klient {_editingCustomer.FullName} zaktualizowany!");
                 }
                 else
                 {
-                    // Dodawanie nowego klienta
+                    // === TRYB DODAWANIA ===
                     var customer = CreateCustomerFromForm();
                     customerService.AddCustomer(customer);
                     logger.LogInfo($"✅ Dodano klienta: {customer.FullName}");
-                    ShowSuccessMessage($"Klient {customer.FullName} został dodany do systemu!");
+                    ShowSuccessMessage($"Klient {customer.FullName} dodany do systemu!");
                 }
 
                 DialogResult = DialogResult.OK;
@@ -255,7 +288,7 @@ namespace CarRentalSystem.Forms
             catch (Exception ex)
             {
                 logger.LogError("❌ Błąd podczas zapisywania klienta", ex);
-                ShowErrorMessage($"Wystąpił błąd: {ex.Message}");
+                ShowErrorMessage($"Błąd: {ex.Message}");
             }
         }
 
@@ -305,7 +338,7 @@ namespace CarRentalSystem.Forms
                 return false;
             }
 
-            textBox.BackColor = Color.FromArgb(230, 255, 230);
+            textBox.BackColor = Color.White; // ✅ NORMALNY KOLOR
             return true;
         }
 

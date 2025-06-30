@@ -286,27 +286,16 @@ namespace CarRentalSystem.Forms
         {
             if (customersGrid.SelectedRows.Count > 0)
             {
-                try
-                {
-                    var selectedCustomer = (Customer)customersGrid.SelectedRows[0].DataBoundItem;
-                    // ✅ POPRAWKA: Przekaż selectedCustomer do konstruktora
-                    var customerForm = new CustomerFormDialog(_customerService, _logger, selectedCustomer);
+                var selectedCustomer = (Customer)customersGrid.SelectedRows[0].DataBoundItem;
 
-                    if (customerForm.ShowDialog() == DialogResult.OK)
-                    {
-                        LoadCustomerData();
-                        RefreshDashboardStats();
-                    }
-                }
-                catch (Exception ex)
+                // ✅ PRZEKAŻ selectedCustomer jako trzeci parametr
+                var customerForm = new CustomerFormDialog(_customerService, _logger, selectedCustomer);
+
+                if (customerForm.ShowDialog() == DialogResult.OK)
                 {
-                    _logger.LogError("Błąd edycji klienta", ex);
-                    MessageBox.Show("Błąd edycji klienta", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LoadCustomerData();
+                    RefreshDashboardStats();
                 }
-            }
-            else
-            {
-                MessageBox.Show("Wybierz klienta do edycji", "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 

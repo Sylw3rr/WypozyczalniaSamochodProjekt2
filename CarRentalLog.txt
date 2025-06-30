@@ -241,3 +241,60 @@ StackTrace:    at CarRentalSystem.Forms.CustomerFormDialog.AttachEvents() in C:\
 30.06.2025 15:53:46 [INFO] - Załadowano dane klientów
 30.06.2025 15:53:46 [INFO] - Załadowano dane wypożyczeń
 30.06.2025 15:53:46 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 16:11:08 [INFO] - Załadowano dane pojazdów
+30.06.2025 16:11:08 [INFO] - Załadowano dane klientów
+30.06.2025 16:11:08 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 16:11:08 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 16:12:51 [INFO] - Załadowano dane pojazdów
+30.06.2025 16:12:51 [INFO] - Załadowano dane klientów
+30.06.2025 16:12:51 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 16:12:51 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 16:52:08 [INFO] - Załadowano dane pojazdów
+30.06.2025 16:52:08 [INFO] - Załadowano dane klientów
+30.06.2025 16:52:08 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 16:52:08 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 17:22:44 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:22:44 [INFO] - Załadowano dane klientów
+30.06.2025 17:22:44 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 17:22:44 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 17:23:12 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:23:12 [INFO] - Załadowano dane klientów
+30.06.2025 17:23:12 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 17:23:12 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 17:23:32 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:23:32 [INFO] - Załadowano dane klientów
+30.06.2025 17:23:32 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 17:23:32 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 17:24:43 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:24:43 [INFO] - Załadowano dane klientów
+30.06.2025 17:24:43 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 17:24:43 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 17:24:58 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:24:58 [INFO] - Załadowano dane klientów
+30.06.2025 17:24:58 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 17:24:58 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 17:28:28 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:28:28 [INFO] - Załadowano dane klientów
+30.06.2025 17:28:28 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 17:28:28 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 17:29:38 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:29:38 [INFO] - Załadowano dane klientów
+30.06.2025 17:29:38 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 17:29:38 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 17:34:18 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:34:18 [INFO] - Załadowano dane klientów
+30.06.2025 17:34:18 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 17:34:18 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie
+30.06.2025 17:36:00 [INFO] - Dodano pojazd: dsadsadasd dfsadsa (2025) - DSADSADAS
+30.06.2025 17:36:00 [INFO] - Dodano nowy pojazd: dsadsadasd dfsadsa
+30.06.2025 17:36:01 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:36:06 [INFO] - Zaktualizowano pojazd: dsadsadasd dfsadsa (2025) - DSADSADAS
+30.06.2025 17:36:06 [INFO] - Zaktualizowano pojazd: dsadsadasd dfsadsa
+30.06.2025 17:36:07 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:36:10 [INFO] - Usunięto pojazd: dsadsadasd dfsadsa (2025) - DSADSADAS
+30.06.2025 17:36:10 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:36:10 [INFO] - Usunięto pojazd: dsadsadasd dfsadsa
+30.06.2025 17:37:02 [INFO] - Załadowano dane pojazdów
+30.06.2025 17:37:02 [INFO] - Załadowano dane klientów
+30.06.2025 17:37:02 [INFO] - Załadowano dane wypożyczeń
+30.06.2025 17:37:02 [INFO] - Aplikacja CarRentalSystem uruchomiona pomyślnie

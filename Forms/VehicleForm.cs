@@ -127,7 +127,7 @@ namespace CarRentalSystem.Forms
             // Dostępność
             availableCheckBox = new CheckBox
             {
-                Text = "✅ Pojazd dostępny do wypożyczenia",
+                Text = "✅ Dostępny do wypożyczenia",
                 Location = new Point(130, yPosition),
                 Size = new Size(250, 23),
                 Checked = true,
