@@ -44,8 +44,11 @@ Program.cs – punkt startowy aplikacji
 ```
 dotnet run --project WypozyczalniaSamochodProjekt2.csproj
 ```
+
 Aplikacja zbuduje projekt, stworzy (jeśli nie istnieją) bazę danych i plik logów, a następnie wyświetli konsolowe menu.
+
 ---
+
 ## 🧩 Użycie
 Po uruchomieniu zobaczysz konsolowe menu z opcjami:
 
