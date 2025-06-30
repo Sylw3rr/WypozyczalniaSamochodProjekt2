@@ -72,7 +72,7 @@ Automatyczne budowanie i testowanie aplikacji przy każdym commicie oraz łatwe 
 - Nowoczesny interfejs (WPF / MAUI albo Blazor Web)
 Lepszy UX, responsywność i możliwość uruchomienia aplikacji na wielu platformach.
 
--System powiadomień i płatności online
+- System powiadomień i płatności online
 - E-maile lub SMS-y o rezerwacjach i zwrotach oraz integracja z bramką płatniczą dla pełnego procesu wynajmu.
 
 - Zaawansowana analityka i raporty
