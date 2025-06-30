@@ -40,13 +40,11 @@ Program.cs – punkt startowy aplikacji
 
 2. **Sprawdź, że masz zainstalowany .NET SDK (wersja 6 lub nowsza).**
 
-Uruchom aplikację:
-
-Kopiuj
-Edytuj
+3. **Uruchom aplikację:**
+```
 dotnet run --project WypozyczalniaSamochodProjekt2.csproj
 Aplikacja zbuduje projekt, stworzy (jeśli nie istnieją) bazę danych i plik logów, a następnie wyświetli konsolowe menu.
-
+```
 ---
 ## 🧩 Użycie
 Po uruchomieniu zobaczysz konsolowe menu z opcjami:
