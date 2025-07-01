@@ -64,7 +64,7 @@ Po uruchomieniu zobaczysz konsolowe menu z opcjami:
 ---
 ## 🚀 Roadmapa rozwoju
 - Migracja do .NET 8 & EF Core
-Modernizacja środowiska uruchomieniowego i wprowadzenie trwałej bazy danych zamiast kolekcji w pamięci.
+Modernizacja środowiska uruchomieniowego.
 
 - Konteneryzacja Docker + CI/CD (GitHub Actions)
 Automatyczne budowanie i testowanie aplikacji przy każdym commicie oraz łatwe wdrażanie w chmurze.
