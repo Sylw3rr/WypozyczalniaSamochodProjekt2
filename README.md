@@ -62,7 +62,7 @@ Po uruchomieniu zobaczysz konsolowe menu z opcjami:
 - **Wyjdź – zakończenie programu**
 
 ---
-## 🚀 Szybka roadmapa rozwoju
+## 🚀 Roadmapa rozwoju
 - Migracja do .NET 8 & EF Core
 Modernizacja środowiska uruchomieniowego i wprowadzenie trwałej bazy danych zamiast kolekcji w pamięci.
 
